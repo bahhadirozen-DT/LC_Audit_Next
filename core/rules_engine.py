@@ -31,6 +31,13 @@ class RulesEngine:
             elif rule_type == "varlik":
                 status = "PASS" if value is not None else "FAIL"
 
+            elif rule_type == "ibraz_suresi":
+                if value is not None:
+                    status = "PASS"
+                else:
+                    status = "PASS"
+                    value = "21 days default (UCP600 Art 14)"
+
             elif rule_type == "liste_iceriyor":
                 if isinstance(value, list):
                     status = "PASS" if expected in value else "FAIL"
