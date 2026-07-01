@@ -31,6 +31,12 @@
       "tip": "tolerans",
       "alan": "field39A",
       "aciklama": "Tolerans bilgisi kontrol edilir."
+    },
+    {
+      "madde": "Art 12",
+      "tip": "varlik",
+      "alan": "field41A",
+      "aciklama": "Akreditifin kullanılacağı banka ve ödeme/iştira şekli belirtilmelidir."
     }
   ]
 }
