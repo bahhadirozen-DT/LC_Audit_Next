@@ -8,14 +8,20 @@
       "aciklama": "Akreditif gayrikabili rücu olmalıdır."
     },
     {
+      "madde": "Art 6",
+      "tip": "tarih_varmi",
+      "alan": "field31D",
+      "aciklama": "Akreditif son geçerlilik tarihi bulunmalıdır."
+    },
+    {
       "madde": "Art 14",
       "tip": "varlik",
       "alan": "field48",
-      "aciklama": "İbraz süresi kontrol edilir. Belirtilmezse UCP600 gereği 21 gün uygulanır."
+      "aciklama": "İbraz süresi kontrol edilir."
     },
     {
       "madde": "Art 18",
-      "tip": "liste_icerik",
+      "tip": "liste_iceriyor",
       "alan": "required_documents",
       "beklenen": "COMMERCIAL INVOICE",
       "aciklama": "Ticari fatura bulunmalıdır."

@@ -31,11 +31,14 @@ class RulesEngine:
             elif rule_type == "varlik":
                 status = "PASS" if value is not None else "FAIL"
 
-            elif rule_type == "liste_icerik":
+            elif rule_type == "liste_iceriyor":
                 if isinstance(value, list):
                     status = "PASS" if expected in value else "FAIL"
                 else:
                     status = "FAIL"
+
+            elif rule_type == "tarih_varmi":
+                status = "PASS" if value is not None else "FAIL"
 
             else:
                 status = "UNKNOWN"
