@@ -47,6 +47,12 @@ class RulesEngine:
             elif rule_type == "tarih_varmi":
                 status = "PASS" if value is not None else "FAIL"
 
+            elif rule_type == "tolerans":
+                if value and "/" in str(value):
+                    status = "PASS"
+                else:
+                    status = "FAIL"
+
             else:
                 status = "UNKNOWN"
 
