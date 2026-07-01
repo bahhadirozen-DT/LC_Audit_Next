@@ -2,9 +2,29 @@
   "kurallar": [
     {
       "madde": "Art 3",
+      "tip": "esitlik",
       "alan": "field40A",
       "beklenen": "IRREVOCABLE",
-      "aciklama": "Akreditif gayrikabili rücu (dönülemez) olmalıdır."
+      "aciklama": "Akreditif gayrikabili rücu olmalıdır."
+    },
+    {
+      "madde": "Art 14",
+      "tip": "varlik",
+      "alan": "field48",
+      "aciklama": "İbraz süresi kontrol edilir. Belirtilmezse UCP600 gereği 21 gün uygulanır."
+    },
+    {
+      "madde": "Art 18",
+      "tip": "liste_icerik",
+      "alan": "required_documents",
+      "beklenen": "COMMERCIAL INVOICE",
+      "aciklama": "Ticari fatura bulunmalıdır."
+    },
+    {
+      "madde": "Art 30",
+      "tip": "varlik",
+      "alan": "field39A",
+      "aciklama": "Tolerans bilgisi kontrol edilir."
     }
   ]
 }

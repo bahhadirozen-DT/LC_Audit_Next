@@ -19,14 +19,26 @@ class RulesEngine:
         for rule in self.rules["kurallar"]:
 
             field = rule["alan"]
-            expected = rule["beklenen"]
+            expected = rule.get("beklenen")
 
             value = getattr(document, field, None)
 
-            if value == expected:
-                status = "PASS"
+            rule_type = rule.get("tip")
+
+            if rule_type == "esitlik":
+                status = "PASS" if value == expected else "FAIL"
+
+            elif rule_type == "varlik":
+                status = "PASS" if value is not None else "FAIL"
+
+            elif rule_type == "liste_icerik":
+                if isinstance(value, list):
+                    status = "PASS" if expected in value else "FAIL"
+                else:
+                    status = "FAIL"
+
             else:
-                status = "FAIL"
+                status = "UNKNOWN"
 
             results.append({
                 "madde": rule["madde"],
