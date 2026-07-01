@@ -1,0 +1,10 @@
+{
+  "kurallar": [
+    {
+      "madde": "Art 3",
+      "alan": "field40A",
+      "beklenen": "IRREVOCABLE",
+      "aciklama": "Akreditif gayrikabili rücu (dönülemez) olmalıdır."
+    }
+  ]
+}
