@@ -1,5 +1,5 @@
-from models.mt700_model import MT700Model
 from datetime import date
+from models.mt700_model import MT700Model
 
 
 def parse_date(value):
@@ -16,14 +16,9 @@ def parse_date(value):
 
 
 def parse_mt700(text: str) -> MT700Model:
-    """
-    SWIFT MT700 parser
-    """
-
     data = {}
 
     lines = text.splitlines()
-
     i = 0
 
     while i < len(lines):
@@ -45,18 +40,13 @@ def parse_mt700(text: str) -> MT700Model:
 
 
         if field == "field32B":
-
-            currency = value[:3]
-            amount = value[3:].replace(",", "")
-
             data[field] = {
-                "currency": currency,
-                "amount": float(amount)
+                "currency": value[:3],
+                "amount": float(value[3:].replace(",", ""))
             }
 
 
         elif field in ["field31C", "field31D", "field44C"]:
-
             data[field] = parse_date(value)
 
 
@@ -67,7 +57,9 @@ def parse_mt700(text: str) -> MT700Model:
             i += 1
 
             while i < len(lines) and lines[i].strip().startswith("+"):
-                docs.append(lines[i].strip()[1:])
+                docs.append(
+                    lines[i].strip()[1:]
+                )
                 i += 1
 
             data[field] = {
@@ -79,7 +71,9 @@ def parse_mt700(text: str) -> MT700Model:
 
         elif field == "field71B":
 
-            data[field] = [value]
+            data[field] = [
+                value
+            ]
 
 
         elif hasattr(MT700Model, field):
@@ -116,11 +110,15 @@ def parse_mt700(text: str) -> MT700Model:
         latest_shipment_date=data.get("field44C"),
 
 
-        required_documents=data.get("field46A", {}).get(
+        required_documents=data.get(
+            "field46A",
+            {}
+        ).get(
             "documents",
             []
         ),
 
 
         **data
+
     )
