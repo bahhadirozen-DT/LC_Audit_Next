@@ -37,6 +37,30 @@
       "tip": "varlik",
       "alan": "field41A",
       "aciklama": "Akreditifin kullanılacağı banka ve ödeme/iştira şekli belirtilmelidir."
+    },
+    {
+      "madde": "Art 8",
+      "tip": "varlik",
+      "alan": "field49",
+      "aciklama": "Teyit talimatı (Confirmation Instructions) kontrol edilir."
+    },
+    {
+      "madde": "Art 31P",
+      "tip": "varlik",
+      "alan": "field43P",
+      "aciklama": "Kısmi yükleme (Partial Shipment) talimatı kontrol edilir."
+    },
+    {
+      "madde": "Art 31T",
+      "tip": "varlik",
+      "alan": "field43T",
+      "aciklama": "Aktarma (Transshipment) talimatı kontrol edilir."
+    },
+    {
+      "madde": "Art 37",
+      "tip": "varlik",
+      "alan": "field71B",
+      "aciklama": "Banka masrafları bilgisi kontrol edilir."
     }
   ]
 }

@@ -45,6 +45,8 @@ class MT700Model(BaseDocument):
     field47A: Optional[str] = None
     field48: Optional[Union[int, str]] = None
     field49: Optional[str] = None
+    field50: Optional[str] = None
+    field59: Optional[str] = None
     field53A: Optional[str] = None
     field57A: Optional[str] = None
     field71B: List[str] = field(default_factory=list)

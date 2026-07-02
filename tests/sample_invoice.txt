@@ -1,0 +1,10 @@
+Invoice No: INV-2026-001
+Date: 2026-07-02
+
+Seller: XYZ EXPORT LTD
+Buyer: ABC IMPORT LTD
+
+Currency: USD
+Total: 100000
+
+Incoterm: FOB

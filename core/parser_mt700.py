@@ -76,7 +76,7 @@ def parse_mt700(text: str) -> MT700Model:
             ]
 
 
-        elif hasattr(MT700Model, field):
+        elif field.startswith('field'):
 
             data[field] = value
 
