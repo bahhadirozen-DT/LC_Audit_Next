@@ -1,124 +1,109 @@
-from datetime import date
+import re
+
 from models.mt700_model import MT700Model
 
 
-def parse_date(value):
-    value = value.strip()
+def _find(pattern, text):
 
-    if len(value) == 6 and value.isdigit():
-        return date(
-            2000 + int(value[0:2]),
-            int(value[2:4]),
-            int(value[4:6])
-        )
+    m = re.search(
+        pattern,
+        text,
+        re.IGNORECASE | re.MULTILINE | re.DOTALL,
+    )
 
-    return value
+    if m:
+        return m.group(1).strip()
 
-
-def parse_mt700(text: str) -> MT700Model:
-    data = {}
-
-    lines = text.splitlines()
-    i = 0
-
-    while i < len(lines):
-
-        line = lines[i].strip()
-
-        if not line.startswith(":"):
-            i += 1
-            continue
-
-        try:
-            tag, value = line.split(":", 2)[1:]
-        except ValueError:
-            i += 1
-            continue
+    return None
 
 
-        field = f"field{tag}"
+def parse_mt700(text: str):
 
-
-        if field == "field32B":
-            data[field] = {
-                "currency": value[:3],
-                "amount": float(value[3:].replace(",", ""))
-            }
-
-
-        elif field in ["field31C", "field31D", "field44C"]:
-            data[field] = parse_date(value)
-
-
-        elif field == "field46A":
-
-            docs = []
-
-            i += 1
-
-            while i < len(lines) and lines[i].strip().startswith("+"):
-                docs.append(
-                    lines[i].strip()[1:]
-                )
-                i += 1
-
-            data[field] = {
-                "documents": docs
-            }
-
-            continue
-
-
-        elif field == "field71B":
-
-            data[field] = [
-                value
-            ]
-
-
-        elif field.startswith('field'):
-
-            data[field] = value
-
-
-        i += 1
-
-
-    return MT700Model(
-
+    model = MT700Model(
         document_type="MT700",
         document_name="Documentary Credit",
-        source_file="sample_mt700.txt",
-        raw_text=text,
-
-
-        lc_number=data.get("field20"),
-
-        applicant=data.get("field50"),
-
-        beneficiary=data.get("field59"),
-
-
-        currency=data.get("field32B", {}).get("currency"),
-
-        amount=data.get("field32B", {}).get("amount"),
-
-
-        expiry_date=data.get("field31D"),
-
-
-        latest_shipment_date=data.get("field44C"),
-
-
-        required_documents=data.get(
-            "field46A",
-            {}
-        ).get(
-            "documents",
-            []
-        ),
-
-
-        **data
-
+        source_file="unknown",
+        raw_text=text
     )
+
+    model.raw_text = text
+
+    # -----------------------------
+    # SWIFT FORMAT
+    # -----------------------------
+
+    model.field20 = _find(r":20:(.+)", text)
+    model.field31D = _find(r":31D:(.+)", text)
+    model.field32B = _find(r":32B:([A-Z]{3}\s*[\d,\.]+)", text)
+    model.field40A = _find(r":40A:(.+)", text)
+
+    model.field50 = _find(r":50:([\s\S]*?)(?=\n:|\Z)", text)
+    model.field59 = _find(r":59:([\s\S]*?)(?=\n:|\Z)", text)
+
+    # -----------------------------
+    # PDF FORMAT
+    # -----------------------------
+
+    if model.field20 is None:
+        model.field20 = _find(r"FIELD\s*20\s*:\s*([^\n\r]+)", text)
+
+    if model.field31D is None:
+        model.field31D = _find(r"FIELD\s*31D\s*:\s*([^\n\r]+)", text)
+
+    if model.field32B is None:
+        model.field32B = _find(
+            r"FIELD\s*32B\s*:\s*([^\n\r]+)",
+            text,
+        )
+
+    if model.field40A is None:
+        model.field40A = _find(
+            r"FIELD\s*40A\s*:\s*([^\n\r]+)",
+            text,
+        )
+
+    model.applicant = _find(
+        r"Applicant.*?:\s*(.+?)(?=\n\s*\n|\nBeneficiary|\nPort)",
+        text,
+    )
+
+    model.beneficiary = _find(
+        r"Beneficiary.*?:\s*(.+?)(?=\n\s*\n|\nPort)",
+        text,
+    )
+
+    model.issuing_bank = _find(
+        r"Sender.*?:\s*(.+?)(?=\n\s*\n|\nApplicant)",
+        text,
+    )
+
+    model.currency = None
+    model.amount = None
+
+    value = model.field32B
+
+    if value:
+
+        m = re.search(
+            r"([A-Z]{3})\s*([\d\.,]+)",
+            value,
+        )
+
+        if m:
+
+            model.currency = m.group(1)
+
+            amt = (
+                m.group(2)
+                .replace(".", "")
+                .replace(",", ".")
+            )
+
+            try:
+                model.amount = float(amt)
+            except:
+                pass
+
+    model.lc_number = model.field20
+
+    return model

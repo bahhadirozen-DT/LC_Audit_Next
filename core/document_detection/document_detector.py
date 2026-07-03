@@ -23,8 +23,22 @@ class DocumentDetector:
             ":27:",
             ":31C:",
             ":31D:",
+            ":32B:",
             ":40A:",
-            ":46A:"
+            ":45A:",
+            ":46A:",
+            "FIELD 20",
+            "FIELD 27",
+            "FIELD 31C",
+            "FIELD 31D",
+            "FIELD 32B",
+            "FIELD 40A",
+            "FIELD 45A",
+            "FIELD 46A",
+            "DOCUMENTARY CREDIT",
+            "APPLICANT",
+            "BENEFICIARY",
+            "ISSUING BANK"
         ]
 
         for tag in mt_tags:
@@ -49,8 +63,18 @@ class DocumentDetector:
 
         packing_words = [
             "PACKING LIST",
-            "NET WEIGHT",
+            "PACKING LIST NO",
+            "PACKAGE DETAILS",
+            "TOTAL PACKAGES",
+            "PALLET NO",
+            "PALLETS",
+            "MARKS & NUMBERS",
+            "CBM",
+            "GROSS KG",
+            "NET KG",
             "GROSS WEIGHT",
+            "NET WEIGHT",
+            "C/NO",
             "PACKAGE",
             "CARTON"
         ]
@@ -77,8 +101,12 @@ class DocumentDetector:
 
         co_words = [
             "CERTIFICATE OF ORIGIN",
+            "CERTIFICATE NO",
             "COUNTRY OF ORIGIN",
-            "CHAMBER OF COMMERCE"
+            "COUNTRY OF DESTINATION",
+            "CHAMBER OF COMMERCE",
+            "EXPORTER",
+            "CONSIGNEE"
         ]
 
         for w in co_words:
