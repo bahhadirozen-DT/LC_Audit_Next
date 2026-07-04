@@ -3,50 +3,63 @@ import re
 from models.bill_of_lading_model import BillOfLadingModel
 
 
-def _find(pattern, text):
-
-    m = re.search(pattern, text, re.IGNORECASE)
-
-    if m:
-        return m.group(1).strip()
-
-    return None
+def find(pattern, text):
+    m = re.search(pattern, text, re.I | re.S)
+    return m.group(1).strip() if m else None
 
 
-def parse_bill_of_lading(text: str):
+def parse_bill_of_lading(text):
 
-    model = BillOfLadingModel()
+    m = BillOfLadingModel()
 
-    model.bl_number = _find(r"B/L\s*No[:\s]+(.+)", text)
-    model.shipper = _find(r"Shipper[:\s]+(.+)", text)
-    model.consignee = _find(r"Consignee[:\s]+(.+)", text)
-    model.notify_party = _find(r"Notify\s*Party[:\s]+(.+)", text)
-
-    model.vessel = _find(r"Vessel[:\s]+(.+)", text)
-
-    model.port_of_loading = _find(
-        r"Port\s*of\s*Loading[:\s]+(.+)",
+    m.bl_number = find(
+        r"(?:B/L|Bill of Lading)\s*No[:\s]+([^\n]+)",
         text
     )
 
-    model.port_of_discharge = _find(
-        r"Port\s*of\s*Discharge[:\s]+(.+)",
+    m.shipper = find(
+        r"Shipper[:\s]+(.*?)Consignee:",
         text
     )
 
-    model.goods_description = _find(
-        r"Description\s*of\s*Goods[:\s]+(.+)",
+    m.consignee = find(
+        r"Consignee[:\s]+(.*?)Notify",
         text
     )
 
-    model.packages = _find(
-        r"Packages[:\s]+(.+)",
+    m.notify_party = find(
+        r"Notify\s*Party[:\s]+(.*?)Vessel",
         text
     )
 
-    model.gross_weight = _find(
-        r"Gross\s*Weight[:\s]+(.+)",
+    m.vessel = find(
+        r"Vessel[:\s]+([^\n]+)",
         text
     )
 
-    return model
+    m.port_of_loading = find(
+        r"Port\s*of\s*Loading[:\s]+([^\n]+)",
+        text
+    )
+
+    m.port_of_discharge = find(
+        r"Port\s*of\s*Discharge[:\s]+([^\n]+)",
+        text
+    )
+
+    m.goods_description = find(
+        r"Description\s*of\s*Goods[:\s]+(.*?)Packages",
+        text
+    )
+
+    m.packages = find(
+        r"Packages[:\s]+([^\n]+)",
+        text
+    )
+
+    m.gross_weight = find(
+        r"Gross\s*Weight[:\s]+([^\n]+)",
+        text
+    )
+
+    return m

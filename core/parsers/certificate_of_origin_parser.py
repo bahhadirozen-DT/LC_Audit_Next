@@ -3,48 +3,43 @@ import re
 from models.certificate_of_origin_model import CertificateOfOriginModel
 
 
-def _find(pattern, text):
-
-    m = re.search(pattern, text, re.IGNORECASE)
-
-    if m:
-        return m.group(1).strip()
-
-    return None
+def g(pattern, text):
+    m = re.search(pattern, text, re.I | re.M)
+    return m.group(1).strip() if m else None
 
 
-def parse_certificate_of_origin(text):
+def parse_certificate_of_origin(text: str):
 
-    model = CertificateOfOriginModel()
+    m = CertificateOfOriginModel()
 
-    model.certificate_number = _find(
-        r"Certificate\s*(?:No|Number)[:\s]+(.+)",
-        text
+    m.certificate_number = g(
+        r"^Certificate\s*(?:No|Number)?[:\s]*([A-Z0-9\-\/]+)$",
+        text,
     )
 
-    model.exporter = _find(
-        r"Exporter[:\s]+(.+)",
-        text
+    m.exporter = g(
+        r"^Exporter:\s*(.+)$",
+        text,
     )
 
-    model.consignee = _find(
-        r"Consignee[:\s]+(.+)",
-        text
+    m.consignee = g(
+        r"^(?:Consignee|Importer):\s*(.+)$",
+        text,
     )
 
-    model.country_of_origin = _find(
-        r"Country\s*of\s*Origin[:\s]+(.+)",
-        text
+    m.country_of_origin = g(
+        r"^(?:Country of Origin|Goods Origin):\s*(.+)$",
+        text,
     )
 
-    model.country_of_destination = _find(
-        r"Country\s*of\s*Destination[:\s]+(.+)",
-        text
+    m.country_of_destination = g(
+        r"^Country of Destination:\s*(.+)$",
+        text,
     )
 
-    model.goods_description = _find(
-        r"Description.*?Goods[:\s]+(.+)",
-        text
+    m.goods_description = g(
+        r"Description:\s*([\s\S]*?)\nSignature:",
+        text,
     )
 
-    return model
+    return m

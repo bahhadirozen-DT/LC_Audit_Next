@@ -3,32 +3,54 @@ import re
 from models.commercial_invoice_model import CommercialInvoiceModel
 
 
-def parse_commercial_invoice(text: str):
+def find(pattern, text):
+    m = re.search(pattern, text, re.I | re.S)
+    return m.group(1).strip() if m else None
 
-    model = CommercialInvoiceModel()
 
-    patterns = {
-        "invoice_number": r"Invoice\s*No[:\s]+(.+)",
-        "invoice_date": r"Date[:\s]+(.+)",
-        "seller": r"Seller[:\s]+(.+)",
-        "buyer": r"Buyer[:\s]+(.+)",
-        "currency": r"Currency[:\s]+([A-Z]{3})",
-        "total_amount": r"Total[:\s]+([\d\.,]+)",
-        "incoterm": r"Incoterm[:\s]+(.+)"
-    }
+def parse_commercial_invoice(text):
 
-    for field, pattern in patterns.items():
+    m = CommercialInvoiceModel()
 
-        m = re.search(pattern, text, re.IGNORECASE)
+    m.invoice_number = find(r"Invoice\s*No[:\s]+([^\n]+)", text)
 
-        if not m:
-            continue
+    m.invoice_date = find(r"Invoice\s*Date[:\s]+([^\n]+)", text)
 
-        value = m.group(1).strip()
+    m.seller = find(
+        r"Exporter[:\s]+(.*?)Importer:",
+        text
+    )
 
-        if field == "total_amount":
-            value = float(value.replace(",", ""))
+    m.buyer = find(
+        r"Importer[:\s]+(.*?)Consignee:",
+        text
+    )
 
-        setattr(model, field, value)
+    money = re.search(
+        r"Total\s*Amount[:\s]+([A-Z]{3})\s*([\d.,]+)",
+        text,
+        re.I
+    )
 
-    return model
+    if money:
+        m.currency = money.group(1)
+        m.total_amount = float(
+            money.group(2)
+            .replace(".", "")
+            .replace(",", ".")
+        )
+
+    m.incoterm = find(
+        r"Terms\s*of\s*Delivery[:\s]+([^\n]+)",
+        text
+    )
+
+    goods = find(
+        r"Description\s*of\s*Goods[:\s]+(.*?)Quantity:",
+        text
+    )
+
+    if goods:
+        m.goods.append(goods)
+
+    return m

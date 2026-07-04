@@ -3,53 +3,70 @@ import re
 from models.packing_list_model import PackingListModel
 
 
-def _find(pattern, text):
-
-    m = re.search(pattern, text, re.IGNORECASE)
-
-    if m:
-        return m.group(1).strip()
-
-    return None
+def find(pattern, text):
+    m = re.search(pattern, text, re.I | re.S)
+    return m.group(1).strip() if m else None
 
 
-def parse_packing_list(text: str):
+def parse_packing_list(text):
 
-    model = PackingListModel()
+    m = PackingListModel()
 
-    model.packing_list_no = _find(
-        r"Packing\s*List\s*No[:\s]+(.+)",
+    m.packing_list_number = find(
+        r"Packing\s*List\s*No[:\s]+([^\n]+)",
         text
     )
 
-    model.exporter = _find(
-        r"Exporter[:\s]+(.+)",
+    m.invoice_number = find(
+        r"Commercial\s*Invoice\s*No[:\s]+([^\n]+)",
         text
     )
 
-    model.importer = _find(
-        r"Importer[:\s]+(.+)",
+    m.exporter = find(
+        r"Exporter[:\s]+(.*?)Importer:",
         text
     )
 
-    model.packages = _find(
-        r"Packages?[:\s]+(.+)",
+    m.importer = find(
+        r"Importer[:\s]+(.*?)Marks",
         text
     )
 
-    model.gross_weight = _find(
-        r"Gross\s*Weight[:\s]+(.+)",
+    m.goods_description = find(
+        r"Description[:\s]+(.*?)PACKAGE DETAILS",
         text
     )
 
-    model.net_weight = _find(
-        r"Net\s*Weight[:\s]+(.+)",
+    m.total_packages = find(
+        r"Total\s*Packages[:\s]+([^\n]+)",
         text
     )
 
-    model.goods_description = _find(
-        r"Description\s*of\s*Goods[:\s]+(.+)",
-        text
+    gross = re.search(
+        r"TOTAL.*?\|\s*[\d.,]+\s*MTRS\s*\|\s*([\d.,]+)",
+        text,
+        re.I | re.S
     )
 
-    return model
+    if gross:
+        m.gross_weight = gross.group(1)
+
+    net = re.search(
+        r"TOTAL.*?\|\s*[\d.,]+\s*MTRS\s*\|\s*[\d.,]+\s*\|\s*([\d.,]+)",
+        text,
+        re.I | re.S
+    )
+
+    if net:
+        m.net_weight = net.group(1)
+
+    cbm = re.search(
+        r"TOTAL.*?([\d.,]+\s*CBM)",
+        text,
+        re.I | re.S
+    )
+
+    if cbm:
+        m.cbm = cbm.group(1)
+
+    return m
