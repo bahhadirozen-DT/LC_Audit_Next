@@ -10,94 +10,183 @@ class CrossDocumentAudit:
         insurance=None,
     ):
 
-        results = []
+        from core.utils.value_compare import ValueComparer
 
-        def add(document, check, left, right):
+        rows=[]
 
-            left = "" if left is None else str(left).strip()
-            right = "" if right is None else str(right).strip()
+        def val(obj,*names):
+            if obj is None:
+                return None
+            for n in names:
+                if hasattr(obj,n):
+                    v=getattr(obj,n)
+                    if v not in (None,"",[],{}):
+                        return v
+            return None
 
-            if not left or not right:
-                status = "UNKNOWN"
-            elif left.upper() == right.upper():
-                status = "PASS"
-            else:
-                status = "FAIL"
+        def add(document,check,left,right):
 
-            results.append({
-                "document": document,
-                "check": check,
-                "status": status,
-                "mt700": left,
-                "document_value": right,
+            result=ValueComparer.compare(left,right)
+
+            status=result["status"]
+            reason=result["reason"]
+
+            rows.append({
+                "document":document,
+                "check":check,
+                "status":status,
+                "mt700":left,
+                 "document_value":right,
+                "reason":reason
             })
 
+        # ===========================
+        # COMMERCIAL INVOICE
+        # ===========================
+
         if invoice:
+
             add(
                 "COMMERCIAL_INVOICE",
-                "Beneficiary",
-                mt700.beneficiary,
-                invoice.seller,
+                "Applicant / Buyer",
+                val(mt700,"applicant"),
+                val(invoice,"buyer","importer")
             )
 
             add(
                 "COMMERCIAL_INVOICE",
-                "Applicant",
-                mt700.applicant,
-                invoice.buyer,
+                "Beneficiary / Seller",
+                val(mt700,"beneficiary"),
+                val(invoice,"seller","exporter")
             )
 
             add(
                 "COMMERCIAL_INVOICE",
                 "Currency",
-                mt700.currency,
-                invoice.currency,
+                val(mt700,"currency"),
+                val(invoice,"currency")
             )
 
             add(
                 "COMMERCIAL_INVOICE",
                 "Amount",
-                mt700.amount,
-                invoice.total_amount,
+                val(mt700,"amount"),
+                val(invoice,"total_amount")
             )
 
+        # ===========================
+        # PACKING LIST
+        # ===========================
+
         if packing:
+
             add(
                 "PACKING_LIST",
                 "Goods Description",
-                mt700.field45A.get("description") if isinstance(mt700.field45A, dict) else mt700.field45A,
-                packing.goods_description,
+                val(invoice,"goods"),
+                val(packing,"goods_description")
             )
+
+            add(
+                "PACKING_LIST",
+                "Gross Weight",
+                val(invoice,"gross_weight"),
+                val(packing,"gross_weight")
+            )
+
+            add(
+                "PACKING_LIST",
+                "Packages",
+                val(invoice,"packages"),
+                val(packing,"packages")
+            )
+
+        # ===========================
+        # BILL OF LADING
+        # ===========================
 
         if bl:
+
             add(
                 "BILL_OF_LADING",
-                "Port of Loading",
-                mt700.field44A,
-                bl.port_of_loading,
+                "Shipper",
+                val(mt700,"beneficiary"),
+                val(bl,"shipper")
             )
 
             add(
                 "BILL_OF_LADING",
-                "Port of Discharge",
-                mt700.field44B,
-                bl.port_of_discharge,
+                "Consignee",
+                val(mt700,"applicant"),
+                val(bl,"consignee")
             )
+
+            add(
+                "BILL_OF_LADING",
+                "Goods",
+                val(invoice,"goods"),
+                val(bl,"goods_description")
+            )
+
+            add(
+                "BILL_OF_LADING",
+                "Gross Weight",
+                val(packing,"gross_weight"),
+                val(bl,"gross_weight")
+            )
+
+        # ===========================
+        # CERTIFICATE OF ORIGIN
+        # ===========================
 
         if co:
+
             add(
                 "CERTIFICATE_OF_ORIGIN",
-                "Country Of Origin",
-                None,
-                co.country_of_origin,
+                "Exporter",
+                val(mt700,"beneficiary"),
+                val(co,"exporter")
             )
 
+            add(
+                "CERTIFICATE_OF_ORIGIN",
+                "Importer",
+                val(mt700,"applicant"),
+                val(co,"consignee")
+            )
+
+            add(
+                "CERTIFICATE_OF_ORIGIN",
+                "Goods",
+                val(invoice,"goods"),
+                val(co,"goods_description")
+            )
+
+        # ===========================
+        # INSURANCE
+        # ===========================
+
         if insurance:
+
             add(
                 "INSURANCE_CERTIFICATE",
                 "Insured",
-                mt700.applicant,
-                insurance.insured,
+                val(mt700,"applicant"),
+                val(insurance,"insured")
             )
 
-        return results
+            add(
+                "INSURANCE_CERTIFICATE",
+                "Beneficiary",
+                val(mt700,"beneficiary"),
+                val(insurance,"beneficiary")
+            )
+
+            add(
+                "INSURANCE_CERTIFICATE",
+                "Currency",
+                val(mt700,"currency"),
+                val(insurance,"currency")
+            )
+
+        return rows
