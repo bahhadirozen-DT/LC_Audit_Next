@@ -42,7 +42,6 @@ def parse_bill_of_lading(text):
         r"Notify\s*Party[:\s]+(.*?)Vessel",
         text,
     )
-    )
 
     m.vessel = find(
         r"Vessel[:\s]+([^\n]+)",
