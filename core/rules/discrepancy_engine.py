@@ -1,5 +1,6 @@
 from core.rules.risk_matrix import RISK_MATRIX
 
+
 class DiscrepancyEngine:
 
     def evaluate(self, rows):
@@ -12,6 +13,8 @@ class DiscrepancyEngine:
 
             if status == "PASS":
                 continue
+
+            info = RISK_MATRIX.get(r["check"], {})
 
             if status == "PASS_WITH_NORMALIZATION":
 
@@ -46,8 +49,7 @@ class DiscrepancyEngine:
                 }
 
                 if r["check"] in critical_checks:
-                    info=RISK_MATRIX.get(r["check"],{})
-severity=info.get("severity","KRİTİK")
+                    severity = info.get("severity", "KRİTİK")
                 else:
                     severity = "UYARI"
 
@@ -59,9 +61,13 @@ severity=info.get("severity","KRİTİK")
                 "check": r["check"],
                 "status": status,
                 "comment": comment,
-                "ucp": info.get("ucp","-"),
-                "isbp": info.get("isbp","-"),
-                "explanation": info.get("tr",""),
+                "ucp": info.get("ucp", "-"),
+                "isbp": info.get("isbp", "-"),
+                "reservation_probability": info.get("reservation_probability"),
+                "action": info.get("action", ""),
+                "title_tr": info.get("title_tr", r["check"]),
+                "title_en": info.get("title_en", r["check"]),
+                "explanation": info.get("tr", ""),
             })
 
         return issues

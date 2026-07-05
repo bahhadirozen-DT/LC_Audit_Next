@@ -1,0 +1,458 @@
+====================================================================================================
+LC AUDIT REPORT
+====================================================================================================
+
+EXECUTIVE SUMMARY
+----------------------------------------------------------------------------------------------------
+Overall Risk          : HIGH
+Recommendation (EN)   : PRESENT AFTER CORRECTION
+Recommendation (TR)   : DÜZELTİLDİKTEN SONRA İBRAZ EDİN
+
+Critical : 3
+Warning  : 3
+Info     : 5
+
+====================================================================================================
+
+[1] Applicant / Buyer
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : COMMERCIAL_INVOICE
+Önem Derecesi         : YÜKSEK
+Durum                : FAIL
+
+Türkçe Alan          : Alıcı
+English Field        : Applicant / Buyer
+
+UCP600               : UCP600 Madde 18
+ISBP                 : ISBP 821 A18
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+Applicant bilgisi akreditifle uyuşmuyor.
+
+Rezerv Olasılığı     : %95
+
+Önerilen İşlem
+Alıcı bilgisi kontrol edilmeli, gerekiyorsa belge düzeltilmelidir.
+
+====================================================================================================
+
+[2] Amount
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : COMMERCIAL_INVOICE
+Önem Derecesi         : KRİTİK
+Durum                : FAIL
+
+Türkçe Alan          : Fatura Tutarı
+English Field        : Invoice Amount
+
+UCP600               : UCP600 Madde 18(c)
+ISBP                 : ISBP 821 A23
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+Fatura tutarı akreditifte belirtilen tutarla uyumlu değildir.
+
+Rezerv Olasılığı     : %98
+
+Önerilen İşlem
+Fatura düzeltilmeli veya akreditif amendment'i alınmalıdır.
+
+====================================================================================================
+
+[3] Goods Description
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : PACKING_LIST
+Önem Derecesi         : KRİTİK
+Durum                : FAIL
+
+Türkçe Alan          : Mal Tanımı
+English Field        : Goods Description
+
+UCP600               : UCP600 Madde 18(c)
+ISBP                 : ISBP 821 A23
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+Mal tanımı akreditif şartlarıyla uyumsuz.
+
+Rezerv Olasılığı     : %99
+
+Önerilen İşlem
+Mal tanımı tüm belgelerde aynı hale getirilmelidir.
+
+====================================================================================================
+
+[4] Gross Weight
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : PACKING_LIST
+Önem Derecesi         : BİLGİ
+Durum                : UNKNOWN
+
+Türkçe Alan          : Gross Weight
+English Field        : Gross Weight
+
+UCP600               : -
+ISBP                 : -
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+
+
+Rezerv Olasılığı     : %None
+
+Önerilen İşlem
+
+
+====================================================================================================
+
+[5] Packages
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : PACKING_LIST
+Önem Derecesi         : BİLGİ
+Durum                : UNKNOWN
+
+Türkçe Alan          : Packages
+English Field        : Packages
+
+UCP600               : -
+ISBP                 : -
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+
+
+Rezerv Olasılığı     : %None
+
+Önerilen İşlem
+
+
+====================================================================================================
+
+[6] Shipper
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : BILL_OF_LADING
+Önem Derecesi         : YÜKSEK
+Durum                : FAIL
+
+Türkçe Alan          : Gönderici
+English Field        : Shipper
+
+UCP600               : UCP600 Madde 20
+ISBP                 : ISBP 821 D
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+Gönderici bilgisi uyumsuz.
+
+Rezerv Olasılığı     : %90
+
+Önerilen İşlem
+Konşimento kontrol edilmelidir.
+
+====================================================================================================
+
+[7] Consignee
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : BILL_OF_LADING
+Önem Derecesi         : YÜKSEK
+Durum                : FAIL
+
+Türkçe Alan          : Consignee
+English Field        : Consignee
+
+UCP600               : UCP600 Madde 20
+ISBP                 : ISBP 821 D
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+Consignee bilgisi uyumsuz.
+
+Rezerv Olasılığı     : %90
+
+Önerilen İşlem
+Konşimento yeniden incelenmelidir.
+
+====================================================================================================
+
+[8] Goods
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : BILL_OF_LADING
+Önem Derecesi         : BİLGİ
+Durum                : UNKNOWN
+
+Türkçe Alan          : Goods
+English Field        : Goods
+
+UCP600               : -
+ISBP                 : -
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+
+
+Rezerv Olasılığı     : %None
+
+Önerilen İşlem
+
+
+====================================================================================================
+
+[9] Gross Weight
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : BILL_OF_LADING
+Önem Derecesi         : UYARI
+Durum                : PASS_WITH_NORMALIZATION
+
+Türkçe Alan          : Gross Weight
+English Field        : Gross Weight
+
+UCP600               : -
+ISBP                 : -
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+
+
+Rezerv Olasılığı     : %None
+
+Önerilen İşlem
+
+
+====================================================================================================
+
+[10] Exporter
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : CERTIFICATE_OF_ORIGIN
+Önem Derecesi         : UYARI
+Durum                : WARNING
+
+Türkçe Alan          : Exporter
+English Field        : Exporter
+
+UCP600               : -
+ISBP                 : -
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+
+
+Rezerv Olasılığı     : %None
+
+Önerilen İşlem
+
+
+====================================================================================================
+
+[11] Importer
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : CERTIFICATE_OF_ORIGIN
+Önem Derecesi         : UYARI
+Durum                : WARNING
+
+Türkçe Alan          : Importer
+English Field        : Importer
+
+UCP600               : -
+ISBP                 : -
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+
+
+Rezerv Olasılığı     : %None
+
+Önerilen İşlem
+
+
+====================================================================================================
+
+[12] Goods
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : CERTIFICATE_OF_ORIGIN
+Önem Derecesi         : KRİTİK
+Durum                : FAIL
+
+Türkçe Alan          : Goods
+English Field        : Goods
+
+UCP600               : -
+ISBP                 : -
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+
+
+Rezerv Olasılığı     : %None
+
+Önerilen İşlem
+
+
+====================================================================================================
+
+[13] Insured
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : INSURANCE_CERTIFICATE
+Önem Derecesi         : YÜKSEK
+Durum                : FAIL
+
+Türkçe Alan          : Sigortalı
+English Field        : Insured
+
+UCP600               : UCP600 Madde 28
+ISBP                 : ISBP 821 K
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+Sigortalı bilgisi akreditifle uyumsuz.
+
+Rezerv Olasılığı     : %90
+
+Önerilen İşlem
+Sigorta belgesi düzeltilmelidir.
+
+====================================================================================================
+
+[14] Beneficiary
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : INSURANCE_CERTIFICATE
+Önem Derecesi         : BİLGİ
+Durum                : UNKNOWN
+
+Türkçe Alan          : Beneficiary
+English Field        : Beneficiary
+
+UCP600               : -
+ISBP                 : -
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+
+
+Rezerv Olasılığı     : %None
+
+Önerilen İşlem
+
+
+====================================================================================================
+
+[15] Currency
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : INSURANCE_CERTIFICATE
+Önem Derecesi         : BİLGİ
+Durum                : UNKNOWN
+
+Türkçe Alan          : Para Birimi
+English Field        : Currency
+
+UCP600               : UCP600 Madde 18
+ISBP                 : ISBP 821
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+Para birimi akreditifle uyuşmuyor.
+
+Rezerv Olasılığı     : %99
+
+Önerilen İşlem
+Para birimi düzeltilmelidir.
+
+====================================================================================================
+
+==========================================================================================
+BANKER'S OPINION
+==========================================================================================
+
+TÜRKÇE
+
+Belgelerde toplam 15 adet bulgu tespit edilmiştir.
+Bunların 3 adedi kritik, 3 adedi uyarı, 5 adedi bilgilendirme seviyesindedir.
+
+Değerlendirme UCP600 ve ISBP kuralları dikkate alınarak yapılmıştır.
+Genel denetim puanı: 17/100
+Sonuç: DÜZELTİLDİKTEN SONRA İBRAZ EDİN
+
+------------------------------------------------------------------------------------------
+
+ENGLISH
+
+15 discrepancies were identified.
+3 critical, 3 warning and 5 informational findings.
+The evaluation has been performed according to UCP600 and ISBP.
+Overall audit score: 17/100
+Decision: PRESENT AFTER CORRECTION

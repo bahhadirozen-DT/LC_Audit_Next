@@ -1,72 +1,139 @@
 RISK_MATRIX = {
 
-    "Amount": {
-        "severity":"CRITICAL",
-        "ucp":"UCP600 Art.18(c)",
-        "isbp":"ISBP 821 para A18",
-        "tr":"Fatura tutarı kredi şartlarına uygun olmalıdır."
-    },
+"Amount": {
+    "severity":"KRİTİK",
+    "title_tr":"Fatura Tutarı",
+    "title_en":"Invoice Amount",
+    "ucp":"UCP600 Madde 18(c)",
+    "isbp":"ISBP 821 A23",
+    "reservation_probability":98,
 
-    "Currency":{
-        "severity":"CRITICAL",
-        "ucp":"UCP600 Art.18",
-        "isbp":"ISBP 821 A18",
-        "tr":"Para birimi kredi ile aynı olmalıdır."
-    },
+    "ucp_tr":"Ticari faturadaki tutar akreditif şartlarına uygun olmalıdır.",
 
-    "Applicant / Buyer":{
-        "severity":"HIGH",
-        "ucp":"UCP600 Art.14",
-        "isbp":"ISBP 821 A23",
-        "tr":"Alıcı bilgileri belgeler arasında çelişmemelidir."
-    },
+    "isbp_tr":"Faturadaki bilgiler akreditifle çelişmemelidir. Tutar farklılığı rezerv sebebi olabilir.",
 
-    "Beneficiary / Seller":{
-        "severity":"HIGH",
-        "ucp":"UCP600 Art.14",
-        "isbp":"ISBP 821 A23",
-        "tr":"Lehtar bilgileri belgeler arasında tutarlı olmalıdır."
-    },
+    "tr":"Fatura tutarı akreditifte belirtilen tutarla uyumlu değildir.",
 
-    "Goods Description":{
-        "severity":"CRITICAL",
-        "ucp":"UCP600 Art.18(c)",
-        "isbp":"ISBP 821 A23",
-        "tr":"Mal tanımı kredi şartları ile çelişmemelidir."
-    },
+    "action":"Fatura düzeltilmeli veya akreditif amendment'i alınmalıdır."
+},
 
-    "Shipper":{
-        "severity":"HIGH",
-        "ucp":"UCP600 Art.20",
-        "isbp":"ISBP 821 E",
-        "tr":"Taşıtan bilgisi kredi şartlarına uygun olmalıdır."
-    },
+"Applicant / Buyer":{
+    "severity":"YÜKSEK",
+    "title_tr":"Alıcı",
+    "title_en":"Applicant / Buyer",
+    "ucp":"UCP600 Madde 18",
+    "isbp":"ISBP 821 A18",
+    "reservation_probability":95,
 
-    "Consignee":{
-        "severity":"HIGH",
-        "ucp":"UCP600 Art.20",
-        "isbp":"ISBP 821 E",
-        "tr":"Consignee bilgisi kredi talimatına uygun olmalıdır."
-    },
+    "ucp_tr":"Ticari faturadaki alıcı bilgisi akreditifte belirtilen applicant ile uyumlu olmalıdır.",
 
-    "Country Of Origin":{
-        "severity":"MEDIUM",
-        "ucp":"UCP600 Art.14",
-        "isbp":"ISBP 821 K",
-        "tr":"Menşe ülke bilgisi destekleyici belgelerle uyumlu olmalıdır."
-    },
+    "isbp_tr":"İsim farklı yazılabilir ancak farklı tüzel kişilik oluşturacak değişiklik olmamalıdır.",
 
-    "Gross Weight":{
-        "severity":"LOW",
-        "ucp":"UCP600 Art.14(d)",
-        "isbp":"ISBP 821 A23",
-        "tr":"Ağırlık farklı yazım biçiminde olabilir ancak anlam değişmemelidir."
-    },
+    "tr":"Applicant bilgisi akreditifle uyuşmuyor.",
 
-    "Packages":{
-        "severity":"LOW",
-        "ucp":"UCP600 Art.14(d)",
-        "isbp":"ISBP 821 A23",
-        "tr":"Paket sayısı belgeler arasında tutarlı olmalıdır."
-    }
+    "action":"Alıcı bilgisi kontrol edilmeli, gerekiyorsa belge düzeltilmelidir."
+},
+
+"Beneficiary / Seller":{
+    "severity":"YÜKSEK",
+    "title_tr":"Lehtar",
+    "title_en":"Beneficiary / Seller",
+    "ucp":"UCP600 Madde 18",
+    "isbp":"ISBP 821 A18",
+    "reservation_probability":95,
+
+    "ucp_tr":"Faturadaki satıcı, akreditifteki beneficiary olmalıdır.",
+
+    "isbp_tr":"Küçük yazım farklılıkları kabul edilebilir ancak farklı şirket oluşturamaz.",
+
+    "tr":"Lehtar bilgisi uyumsuz.",
+
+    "action":"Satıcı bilgileri düzeltilmelidir."
+},
+
+"Goods Description":{
+    "severity":"KRİTİK",
+    "title_tr":"Mal Tanımı",
+    "title_en":"Goods Description",
+    "ucp":"UCP600 Madde 18(c)",
+    "isbp":"ISBP 821 A23",
+    "reservation_probability":99,
+
+    "ucp_tr":"Ticari faturadaki mal tanımı akreditifte yer alan mal tanımıyla uyumlu olmalıdır.",
+
+    "isbp_tr":"Mal tanımı daha ayrıntılı olabilir ancak akreditifle çelişemez.",
+
+    "tr":"Mal tanımı akreditif şartlarıyla uyumsuz.",
+
+    "action":"Mal tanımı tüm belgelerde aynı hale getirilmelidir."
+},
+
+"Currency":{
+    "severity":"KRİTİK",
+    "title_tr":"Para Birimi",
+    "title_en":"Currency",
+    "ucp":"UCP600 Madde 18",
+    "isbp":"ISBP 821",
+    "reservation_probability":99,
+
+    "ucp_tr":"Belge üzerindeki para birimi akreditifle aynı olmalıdır.",
+
+    "isbp_tr":"Para birimi farklılığı rezerv oluşturabilir.",
+
+    "tr":"Para birimi akreditifle uyuşmuyor.",
+
+    "action":"Para birimi düzeltilmelidir."
+},
+
+"Shipper":{
+    "severity":"YÜKSEK",
+    "title_tr":"Gönderici",
+    "title_en":"Shipper",
+    "ucp":"UCP600 Madde 20",
+    "isbp":"ISBP 821 D",
+    "reservation_probability":90,
+
+    "ucp_tr":"Konşimentodaki shipper bilgisi akreditif şartlarını karşılamalıdır.",
+
+    "isbp_tr":"Shipper bilgisi farklı tüzel kişilik oluşturacak şekilde değişmemelidir.",
+
+    "tr":"Gönderici bilgisi uyumsuz.",
+
+    "action":"Konşimento kontrol edilmelidir."
+},
+
+"Consignee":{
+    "severity":"YÜKSEK",
+    "title_tr":"Consignee",
+    "title_en":"Consignee",
+    "ucp":"UCP600 Madde 20",
+    "isbp":"ISBP 821 D",
+    "reservation_probability":90,
+
+    "ucp_tr":"Konşimentodaki consignee bilgisi LC şartlarına uygun olmalıdır.",
+
+    "isbp_tr":"TO ORDER veya banka adına düzenleme LC şartına göre değerlendirilmelidir.",
+
+    "tr":"Consignee bilgisi uyumsuz.",
+
+    "action":"Konşimento yeniden incelenmelidir."
+},
+
+"Insured":{
+    "severity":"YÜKSEK",
+    "title_tr":"Sigortalı",
+    "title_en":"Insured",
+    "ucp":"UCP600 Madde 28",
+    "isbp":"ISBP 821 K",
+    "reservation_probability":90,
+
+    "ucp_tr":"Sigorta belgesi akreditifte belirtilen taraf lehine düzenlenmelidir.",
+
+    "isbp_tr":"Sigortalı kişi veya kuruluş LC şartlarına uygun olmalıdır.",
+
+    "tr":"Sigortalı bilgisi akreditifle uyumsuz.",
+
+    "action":"Sigorta belgesi düzeltilmelidir."
+}
+
 }
