@@ -5,7 +5,25 @@ from models.packing_list_model import PackingListModel
 
 def find(pattern, text):
     m = re.search(pattern, text, re.I | re.S)
-    return m.group(1).strip() if m else None
+    
+
+    # --------------------------------------------------
+    # Generic metadata
+    # --------------------------------------------------
+
+    m.raw_text = text
+
+    if not hasattr(m, "originals"):
+        m.originals = None
+
+    if not hasattr(m, "copies"):
+        m.copies = None
+
+    if not hasattr(m, "shipment_date"):
+        m.shipment_date = None
+
+    return m
+.group(1).strip() if m else None
 
 
 def parse_packing_list(text):
@@ -69,4 +87,22 @@ def parse_packing_list(text):
     if cbm:
         m.cbm = cbm.group(1)
 
+    
+
+    # --------------------------------------------------
+    # Generic metadata
+    # --------------------------------------------------
+
+    m.raw_text = text
+
+    if not hasattr(m, "originals"):
+        m.originals = None
+
+    if not hasattr(m, "copies"):
+        m.copies = None
+
+    if not hasattr(m, "shipment_date"):
+        m.shipment_date = None
+
     return m
+

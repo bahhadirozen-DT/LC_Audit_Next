@@ -5,7 +5,25 @@ from models.certificate_of_origin_model import CertificateOfOriginModel
 
 def g(pattern, text):
     m = re.search(pattern, text, re.I | re.M)
-    return m.group(1).strip() if m else None
+    
+
+    # --------------------------------------------------
+    # Generic metadata
+    # --------------------------------------------------
+
+    m.raw_text = text
+
+    if not hasattr(m, "originals"):
+        m.originals = None
+
+    if not hasattr(m, "copies"):
+        m.copies = None
+
+    if not hasattr(m, "shipment_date"):
+        m.shipment_date = None
+
+    return m
+.group(1).strip() if m else None
 
 
 def parse_certificate_of_origin(text: str):
@@ -42,4 +60,22 @@ def parse_certificate_of_origin(text: str):
         text,
     )
 
+    
+
+    # --------------------------------------------------
+    # Generic metadata
+    # --------------------------------------------------
+
+    m.raw_text = text
+
+    if not hasattr(m, "originals"):
+        m.originals = None
+
+    if not hasattr(m, "copies"):
+        m.copies = None
+
+    if not hasattr(m, "shipment_date"):
+        m.shipment_date = None
+
     return m
+

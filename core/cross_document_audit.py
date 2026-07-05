@@ -221,4 +221,159 @@ class CrossDocumentAudit:
             pass
 
 
+        
+
+        # =====================================================
+        # REQUIRED DOCUMENTS (MT700 FIELD 46A)
+        # =====================================================
+
+        if mt700 and getattr(mt700, "required_documents", None):
+
+            required = " ".join(mt700.required_documents).upper()
+
+            checks = [
+                ("COMMERCIAL INVOICE", invoice),
+                ("PACKING LIST", packing),
+                ("BILL OF LADING", bl),
+                ("CERTIFICATE OF ORIGIN", co),
+                ("INSURANCE", insurance),
+            ]
+
+            for name, obj in checks:
+
+                expected = name in required
+                uploaded = obj is not None
+
+                if expected and not uploaded:
+                    rows.append({
+                        "check": f"Required Documents - {name}",
+                        "document": "MT700",
+                        "status": "FAIL",
+                        "expected": "Required by LC",
+                        "actual": "Missing",
+                    })
+
+                elif expected and uploaded:
+                    rows.append({
+                        "check": f"Required Documents - {name}",
+                        "document": "MT700",
+                        "status": "PASS",
+                        "expected": "Required by LC",
+                        "actual": "Uploaded",
+                    })
+
+
+        
+
+        # =====================================================
+        # INSURANCE POLICY vs CERTIFICATE
+        # =====================================================
+
+        if mt700 and insurance:
+
+            specs = getattr(mt700, "required_document_specs", [])
+
+            for s in specs:
+
+                if s["document"] != "INSURANCE":
+                    continue
+
+                required_policy = s["policy"]
+
+                insurance_type = str(
+                    getattr(insurance, "document_name", "")
+                ).upper()
+
+                if required_policy and "CERTIFICATE" in insurance_type:
+
+                    rows.append({
+                        "check":"Insurance Policy Required",
+                        "document":"INSURANCE_CERTIFICATE",
+                        "status":"FAIL"
+                    })
+
+
+        
+
+        # =====================================================
+        # LEGALIZED CERTIFICATE OF ORIGIN
+        # =====================================================
+
+        if mt700 and co:
+
+            specs = getattr(mt700, "required_document_specs", [])
+
+            for s in specs:
+
+                if s["document"] != "CERTIFICATE_OF_ORIGIN":
+                    continue
+
+                if not s["legalized"]:
+                    continue
+
+                legalized = bool(
+                    getattr(co, "legalized", False)
+                )
+
+                if not legalized:
+
+                    rows.append({
+                        "check":"Legalized Certificate of Origin",
+                        "document":"CERTIFICATE_OF_ORIGIN",
+                        "status":"FAIL"
+                    })
+
+
+        
+
+        # =====================================================
+        # ORIGINAL / COPY COUNT
+        # =====================================================
+
+        doc_map = {
+            "COMMERCIAL_INVOICE": invoice,
+            "PACKING_LIST": packing,
+            "BILL_OF_LADING": bl,
+            "CERTIFICATE_OF_ORIGIN": co,
+            "INSURANCE": insurance,
+        }
+
+        if mt700:
+
+            specs = getattr(mt700, "required_document_specs", [])
+
+            for spec in specs:
+
+                obj = doc_map.get(spec["document"])
+
+                if obj is None:
+                    continue
+
+                expected_originals = spec.get("originals", 0)
+                expected_copies = spec.get("copies", 0)
+
+                actual_originals = getattr(obj, "originals", None)
+                actual_copies = getattr(obj, "copies", None)
+
+                if expected_originals and actual_originals is not None:
+
+                    if actual_originals != expected_originals:
+
+                        rows.append({
+                            "check":"Original Copy Count",
+                            "document":spec["document"],
+                            "status":"FAIL"
+                        })
+
+                if expected_copies and actual_copies is not None:
+
+                    if actual_copies != expected_copies:
+
+                        rows.append({
+                            "check":"Copy Count",
+                            "document":spec["document"],
+                            "status":"FAIL"
+                        })
+
+
         return rows

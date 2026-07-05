@@ -8,7 +8,25 @@ def _find(pattern, text):
     m = re.search(pattern, text, re.IGNORECASE)
 
     if m:
-        return m.group(1).strip()
+        
+
+    # --------------------------------------------------
+    # Generic metadata
+    # --------------------------------------------------
+
+    m.raw_text = text
+
+    if not hasattr(m, "originals"):
+        m.originals = None
+
+    if not hasattr(m, "copies"):
+        m.copies = None
+
+    if not hasattr(m, "shipment_date"):
+        m.shipment_date = None
+
+    return m
+.group(1).strip()
 
     return None
 
@@ -52,4 +70,22 @@ def parse_insurance_certificate(text):
         text
     )
 
-    return model
+    
+
+    # --------------------------------------------------
+    # Generic metadata
+    # --------------------------------------------------
+
+    m.raw_text = text
+
+    if not hasattr(m, "originals"):
+        m.originals = None
+
+    if not hasattr(m, "copies"):
+        m.copies = None
+
+    if not hasattr(m, "shipment_date"):
+        m.shipment_date = None
+
+    return m
+odel

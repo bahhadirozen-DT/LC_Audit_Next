@@ -146,6 +146,71 @@ def parse_mt700(text: str):
         model.required_documents=required
 
 
+
+    # --------------------------------------------------
+    # Parse FIELD 46A document requirements
+    # --------------------------------------------------
+
+    model.required_document_specs = []
+
+    if model.field46A:
+
+
+        for line in model.field46A.splitlines():
+
+            line = line.strip()
+
+            if not line:
+                continue
+
+            u = line.upper()
+
+            spec = {
+                "raw": line,
+                "document": None,
+                "originals": 0,
+                "copies": 0,
+                "policy": False,
+                "certificate": False,
+                "legalized": False,
+            }
+
+            if "COMMERCIAL INVOICE" in u:
+                spec["document"] = "COMMERCIAL_INVOICE"
+
+            elif "PACKING LIST" in u:
+                spec["document"] = "PACKING_LIST"
+
+            elif "BILL OF LADING" in u:
+                spec["document"] = "BILL_OF_LADING"
+
+            elif "CERTIFICATE OF ORIGIN" in u:
+                spec["document"] = "CERTIFICATE_OF_ORIGIN"
+
+            elif "INSURANCE" in u:
+                spec["document"] = "INSURANCE"
+
+            m = re.search(r'(\d+)\s+ORIGINAL', u)
+            if m:
+                spec["originals"] = int(m.group(1))
+
+            m = re.search(r'(\d+)\s+COP', u)
+            if m:
+                spec["copies"] = int(m.group(1))
+
+            if "POLICY" in u:
+                spec["policy"] = True
+
+            if "CERTIFICATE" in u:
+                spec["certificate"] = True
+
+            if "LEGALIZED" in u:
+                spec["legalized"] = True
+
+            if spec["document"]:
+                model.required_document_specs.append(spec)
+
     model.lc_number = model.field20
+
 
     return model
