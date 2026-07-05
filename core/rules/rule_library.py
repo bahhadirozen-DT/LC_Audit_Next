@@ -114,3 +114,21 @@ RULE_LIBRARY = {
 }
 
 print("Rule Library loaded:", len(RULE_LIBRARY))
+
+
+
+RULE_LIBRARY["UCP600 Madde 20 - Latest Shipment Date"]={
+    "title":"Latest Shipment Date",
+
+    "official_tr":
+    "Yükleme tarihi akreditifte belirtilen son yükleme tarihini aşmamalıdır.",
+
+    "official_en":
+    "Shipment must not occur later than the latest shipment date stated in the credit.",
+
+    "bank_comment":
+    "Bankalar konşimentodaki On Board tarihini kontrol eder.",
+
+    "reservation":
+    "Son yükleme tarihinin aşılması rezerv oluşturur."
+}

@@ -189,4 +189,36 @@ class CrossDocumentAudit:
                 val(insurance,"currency")
             )
 
+        
+
+        # -------------------------------------------------
+        # Latest Shipment Date
+        # -------------------------------------------------
+
+        try:
+
+            if mt700 and bl:
+
+                lc_date=getattr(mt700,"latest_shipment_date",None)
+                bl_date=getattr(bl,"shipment_date",None)
+
+                if lc_date and bl_date:
+
+                    status="PASS"
+
+                    if bl_date>lc_date:
+                        status="FAIL"
+
+                    rows.append({
+                        "document":"BILL_OF_LADING",
+                        "check":"Latest Shipment Date",
+                        "status":status,
+                        "expected":str(lc_date),
+                        "actual":str(bl_date),
+                    })
+
+        except Exception:
+            pass
+
+
         return rows

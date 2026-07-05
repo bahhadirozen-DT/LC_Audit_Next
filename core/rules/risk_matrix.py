@@ -136,4 +136,26 @@ RISK_MATRIX = {
     "action":"Sigorta belgesi düzeltilmelidir."
 }
 
+
+
+,
+"Latest Shipment Date": {
+    "severity":"KRİTİK",
+    "title_tr":"Son Yükleme Tarihi",
+    "title_en":"Latest Shipment Date",
+
+    "ucp":"UCP600 Madde 20",
+    "isbp":"ISBP 821 D",
+
+    "reservation_probability":99,
+
+    "ucp_tr":"Yükleme, akreditifte belirtilen son yükleme tarihinden geç olmamalıdır.",
+
+    "isbp_tr":"Konşimentodaki On Board tarihi latest shipment date'i aşmamalıdır.",
+
+    "tr":"Yükleme tarihi akreditifte izin verilen son tarihten sonra yapılmış.",
+
+    "action":"Konşimento tarihi kontrol edilmeli veya amendment alınmalıdır."
+}
+
 }

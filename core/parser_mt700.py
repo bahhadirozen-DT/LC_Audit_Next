@@ -104,6 +104,48 @@ def parse_mt700(text: str):
             except:
                 pass
 
+    
+
+    # --------------------------------------------------
+    # PDF MT700 EXTRA FIELDS
+    # --------------------------------------------------
+
+    if model.field44C is None:
+        model.field44C=_find(r"FIELD\s*44C\s*:\s*([^\n\r]+)",text)
+
+    if model.field45A in (None,{}):
+        goods=_find(
+            r"FIELD\s*45A\s*:\s*([\s\S]*?)(?=FIELD\s*46A|Sender|Applicant)",
+            text
+        )
+        model.field45A=goods
+
+    if model.field46A in (None,{}):
+        docs=_find(
+            r"FIELD\s*46A\s*:\s*([\s\S]*?)(?=Sender|Applicant)",
+            text
+        )
+        model.field46A=docs
+
+    model.latest_shipment_date=model.field44C
+
+    if model.field45A:
+        model.goods_description=model.field45A
+
+    if model.field46A:
+
+        required=[]
+
+        for line in model.field46A.splitlines():
+
+            line=line.strip()
+
+            if line:
+                required.append(line)
+
+        model.required_documents=required
+
+
     model.lc_number = model.field20
 
     return model

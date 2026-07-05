@@ -1,8 +1,15 @@
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
 from core.audit_engine import AuditEngine
 from core.cross_document_audit import CrossDocumentAudit
 from core.rules.discrepancy_engine import DiscrepancyEngine
 from core.reporting.executive_summary import ExecutiveSummary
 from core.reporting.audit_report import AuditReport
+from core.reporting.score_engine import ScoreEngine
 
 FILES = [
     "tests/Kusat.pdf",
@@ -14,7 +21,6 @@ FILES = [
 ]
 
 engine = AuditEngine()
-
 docs = {}
 
 print("=" * 90)
@@ -22,12 +28,8 @@ print("LC AUDIT STARTED")
 print("=" * 90)
 
 for f in FILES:
-
     r = engine.load_and_parse(f)
-
     docs[r["document_type"]] = r["model"]
-
-    print(f"[OK] {r['document_type']:<25} <- {f}")
 
 rows = CrossDocumentAudit().compare(
     mt700=docs.get("MT700"),
@@ -41,22 +43,11 @@ rows = CrossDocumentAudit().compare(
 issues = DiscrepancyEngine().evaluate(rows)
 
 summary = ExecutiveSummary().build(issues)
+summary.update(ScoreEngine().calculate(issues))
 
-report = AuditReport()
+report = AuditReport().build(summary, issues)
 
-outfile = report.save(
-    "audit_report.txt",
-    summary,
-    issues,
-)
+with open("audit_report.txt", "w", encoding="utf-8") as f:
+    f.write(report)
 
-print()
-print("=" * 90)
-print("AUDIT COMPLETED")
-print("=" * 90)
-print(f"Critical : {summary['critical']}")
-print(f"Warning  : {summary['warning']}")
-print(f"Info     : {summary['info']}")
-print(f"Decision : {summary['decision_tr']}")
-print()
-print(f"Report saved -> {outfile}")
+print("\n✅ audit_report.txt generated")
