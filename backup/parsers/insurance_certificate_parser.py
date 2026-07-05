@@ -3,10 +3,33 @@ import re
 from models.insurance_certificate_model import InsuranceCertificateModel
 
 
-
 def _find(pattern, text):
+
     m = re.search(pattern, text, re.IGNORECASE)
-    return m.group(1).strip() if m else None
+
+    if m:
+        
+
+    # --------------------------------------------------
+    # Generic metadata
+    # --------------------------------------------------
+
+    m.raw_text = text
+
+    if not hasattr(m, "originals"):
+        m.originals = None
+
+    if not hasattr(m, "copies"):
+        m.copies = None
+
+    if not hasattr(m, "shipment_date"):
+        m.shipment_date = None
+
+    return m
+.group(1).strip()
+
+    return None
+
 
 def parse_insurance_certificate(text):
 
@@ -53,16 +76,16 @@ def parse_insurance_certificate(text):
     # Generic metadata
     # --------------------------------------------------
 
-    model.raw_text = text
+    m.raw_text = text
 
-    if not hasattr(model, "originals"):
-        model.originals = None
+    if not hasattr(m, "originals"):
+        m.originals = None
 
-    if not hasattr(model, "copies"):
-        model.copies = None
+    if not hasattr(m, "copies"):
+        m.copies = None
 
-    if not hasattr(model, "shipment_date"):
-        model.shipment_date = None
+    if not hasattr(m, "shipment_date"):
+        m.shipment_date = None
 
-    return model
-
+    return m
+odel

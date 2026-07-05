@@ -10,7 +10,7 @@ Recommendation (TR)   : DÜZELTİLDİKTEN SONRA İBRAZ EDİN
 
 Critical : 3
 Warning  : 3
-Info     : 5
+Info     : 6
 
 ====================================================================================================
 
@@ -241,8 +241,8 @@ Rezerv Olasılığı     : %None
 [9] Gross Weight
 ----------------------------------------------------------------------------------------------------
 Belge (Document)      : BILL_OF_LADING
-Önem Derecesi         : UYARI
-Durum                : PASS_WITH_NORMALIZATION
+Önem Derecesi         : BİLGİ
+Durum                : UNKNOWN
 
 Türkçe Alan          : Gross Weight
 English Field        : Gross Weight
@@ -434,14 +434,42 @@ Para birimi düzeltilmelidir.
 
 ====================================================================================================
 
+[16] Legalized Certificate of Origin
+----------------------------------------------------------------------------------------------------
+Belge (Document)      : CERTIFICATE_OF_ORIGIN
+Önem Derecesi         : UYARI
+Durum                : FAIL
+
+Türkçe Alan          : Legalized Certificate of Origin
+English Field        : Legalized Certificate of Origin
+
+UCP600               : -
+ISBP                 : -
+
+UCP Açıklaması
+-
+
+ISBP Açıklaması
+-
+
+Banka Yorumu
+
+
+Rezerv Olasılığı     : %None
+
+Önerilen İşlem
+
+
+====================================================================================================
+
 ==========================================================================================
 BANKER'S OPINION
 ==========================================================================================
 
 TÜRKÇE
 
-Belgelerde toplam 15 adet bulgu tespit edilmiştir.
-Bunların 3 adedi kritik, 3 adedi uyarı, 5 adedi bilgilendirme seviyesindedir.
+Belgelerde toplam 16 adet bulgu tespit edilmiştir.
+Bunların 3 adedi kritik, 3 adedi uyarı, 6 adedi bilgilendirme seviyesindedir.
 
 Değerlendirme UCP600 ve ISBP kuralları dikkate alınarak yapılmıştır.
 Genel denetim puanı: 17/100
@@ -451,8 +479,8 @@ Sonuç: DÜZELTİLDİKTEN SONRA İBRAZ EDİN
 
 ENGLISH
 
-15 discrepancies were identified.
-3 critical, 3 warning and 5 informational findings.
+16 discrepancies were identified.
+3 critical, 3 warning and 6 informational findings.
 The evaluation has been performed according to UCP600 and ISBP.
 Overall audit score: 17/100
 Decision: PRESENT AFTER CORRECTION
