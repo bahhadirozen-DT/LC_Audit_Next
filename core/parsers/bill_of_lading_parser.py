@@ -32,7 +32,16 @@ def parse_bill_of_lading(text):
         text,
     )
 
+    
+    m.shipment_date = find(
+        r"Shipped\s*on\s*Board:\s*Date:\s*([^\n]+)",
+        text,
+    )
+
     m.notify_party = find(
+        r"Notify\s*Party[:\s]+(.*?)Vessel",
+        text,
+    )
         r"Notify\s*Party[:\s]+(.*?)Vessel",
         text,
     )
