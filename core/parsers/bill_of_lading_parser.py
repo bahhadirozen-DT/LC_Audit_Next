@@ -59,7 +59,7 @@ def parse_bill_of_lading(text):
     )
 
     m.goods_description = find(
-        r"Description\s*of\s*Goods[:\s]+(.*?)Packages",
+        r"Description[:\s]+(.*?)Gross\s*Weight",
         text,
     )
 
