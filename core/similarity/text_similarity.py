@@ -1,20 +1,24 @@
-import difflib
 import re
+from difflib import SequenceMatcher
 
 
-def normalize(text: str) -> str:
+def normalize(text):
     if text is None:
         return ""
 
-    text = text.upper()
+    text = str(text).upper()
 
-    text = re.sub(r'[^A-Z0-9 ]', ' ', text)
-    text = re.sub(r'\s+', ' ', text)
+    text = text.replace("&", " AND ")
 
-    return text.strip()
+    text = re.sub(r"[.,;:/()\-_]", " ", text)
+
+    text = re.sub(r"\s+", " ", text).strip()
+
+    return text
 
 
-def similarity(a: str, b: str) -> float:
+def similarity(a, b):
+
     a = normalize(a)
     b = normalize(b)
 
@@ -22,6 +26,10 @@ def similarity(a: str, b: str) -> float:
         return 100.0
 
     return round(
-        difflib.SequenceMatcher(None, a, b).ratio() * 100,
-        2
+        SequenceMatcher(None, a, b).ratio() * 100,
+        2,
     )
+
+
+def equal(a, b, threshold=90):
+    return similarity(a, b) >= threshold
