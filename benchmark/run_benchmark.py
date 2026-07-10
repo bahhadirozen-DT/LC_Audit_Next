@@ -25,9 +25,14 @@ for scenario in sorted(SCENARIOS.iterdir()):
 
     docs = {}
 
-    for f in scenario.iterdir():
-        if f.is_file():
-            docs[f.stem.upper()] = str(f)
+    VALID_EXTENSIONS = {".pdf", ".docx", ".doc", ".txt"}
+
+for f in scenario.iterdir():
+    if (
+        f.is_file()
+        and f.suffix.lower() in VALID_EXTENSIONS
+    ):
+        docs[f.stem.upper()] = str(f)
 
     
 report = {}
