@@ -1,10 +1,10 @@
 from pathlib import Path
 import json
+
 from core.audit_engine import AuditEngine
 
 SCENARIOS = Path("benchmark/scenarios")
 EXPECTED = Path("benchmark/expected")
-RESULTS = Path("benchmark/results")
 
 engine = AuditEngine()
 
@@ -23,42 +23,29 @@ for scenario in sorted(SCENARIOS.iterdir()):
 
     print(f"\nScenario : {scenario.name}")
 
-    docs = {}
-
-    VALID_EXTENSIONS = {".pdf", ".docx", ".doc", ".txt"}
-
-for f in scenario.iterdir():
-    if (
-        f.is_file()
-        and f.suffix.lower() in VALID_EXTENSIONS
-    ):
-        docs[f.stem.upper()] = str(f)
-
-    
-
-    report = engine.audit_folder(str(scenario))
-
-    found = []
-
-    for r in report.get("cross_results", []):
-
-        if isinstance(r, str):
-            found.append(r.upper())
-
-        elif hasattr(r, "code"):
-            found.append(str(r.code).upper())
-
-        elif hasattr(r, "field"):
-            found.append(str(r.field).upper())
-
-    found = sorted(set(found))
-
-expected_file = EXPECTED / f"{scenario.name}.json"
+    expected_file = EXPECTED / f"{scenario.name}.json"
 
     if expected_file.exists():
         expected = sorted(json.loads(expected_file.read_text()))
     else:
         expected = []
+
+    report = engine.audit_folder(str(scenario))
+
+    found = []
+
+    for item in report.get("cross_results", []):
+
+        if isinstance(item, str):
+            found.append(item.upper())
+
+        elif hasattr(item, "code"):
+            found.append(str(item.code).upper())
+
+        elif hasattr(item, "field"):
+            found.append(str(item.field).upper())
+
+    found = sorted(set(found))
 
     tp = len(set(found) & set(expected))
 
