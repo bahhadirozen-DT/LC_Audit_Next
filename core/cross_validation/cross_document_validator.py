@@ -7,45 +7,42 @@ from core.validation.legalized_coo_validator import LegalizedCOOValidator
 class CrossDocumentValidator:
 
     def __init__(self):
-
-        self.validators = [
-
-            RequiredDocumentsValidator(),
-
-            OriginalCopyValidator(),
-
-            InsuranceValidator(),
-
-            LegalizedCOOValidator(),
-
-        ]
+        self.required_documents = RequiredDocumentsValidator()
+        self.original_copy = OriginalCopyValidator()
+        self.insurance = InsuranceValidator()
+        self.legalized_coo = LegalizedCOOValidator()
 
     def validate(self, lc, documents):
 
-        results = []
+        results = {}
 
-        for validator in self.validators:
+        uploaded_types = [
+            getattr(d, "document_type", "").upper()
+            for d in documents
+        ]
 
-            if hasattr(validator, "validate"):
+        results["required_documents"] = self.required_documents.validate(
+            getattr(lc, "required_documents", []),
+            uploaded_types,
+        )
 
-                try:
+        results["original_copy"] = self.original_copy.validate(
+            getattr(lc, "required_originals", None),
+            getattr(lc, "required_copies", None),
+            sum(getattr(d, "originals", 0) for d in documents),
+            sum(getattr(d, "copies", 0) for d in documents),
+        )
 
-                    r = validator.validate(lc, documents)
+        results["insurance"] = self.insurance.validate(
+            getattr(lc, "requires_insurance_policy", False),
+            getattr(lc, "requires_insurance_certificate", False),
+            any(getattr(d, "document_type", "") == "INSURANCE_POLICY" for d in documents),
+            any(getattr(d, "document_type", "") == "INSURANCE_CERTIFICATE" for d in documents),
+        )
 
-                    if r:
-
-                        if isinstance(r, list):
-
-                            results.extend(r)
-
-                        else:
-
-                            results.append(r)
-
-                except Exception as e:
-
-                    results.append(
-                        f"{validator.__class__.__name__.upper()} ERROR: {e}"
-                    )
+        results["legalized_coo"] = self.legalized_coo.validate(
+            getattr(lc, "requires_legalized_coo", False),
+            any(getattr(d, "legalized", False) for d in documents),
+        )
 
         return results
