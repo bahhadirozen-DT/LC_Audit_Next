@@ -11,7 +11,6 @@ from core.cross_validation.cross_document_validator import CrossDocumentValidato
 class AuditEngine:
 
     def __init__(self):
-
         self.loader = DocumentLoader()
         self.factory = ParserFactory()
 
@@ -20,14 +19,13 @@ class AuditEngine:
         self.cross = CrossDocumentValidator()
 
     def load_and_parse(self, filename):
-
         text = self.loader.load(filename)
-
         return self.factory.parse(text)
 
     def audit(self, filename):
 
-        model = self.load_and_parse(filename)
+        parsed = self.load_and_parse(filename)
+        model = parsed["model"]
 
         rules = self.rules.audit(model)
 
@@ -37,6 +35,8 @@ class AuditEngine:
             similarity = {}
 
         return {
+            "document_type": parsed["document_type"],
+            "confidence": parsed["confidence"],
             "model": model,
             "rules": rules,
             "similarity": similarity,
@@ -59,16 +59,15 @@ class AuditEngine:
                 continue
 
             try:
-                models.append(self.load_and_parse(str(file)))
+                parsed = self.load_and_parse(str(file))
+                models.append(parsed["model"])
             except Exception as e:
                 print(f"SKIP {file.name}: {e}")
-
-        cross_results = []
 
         try:
             cross_results = self.cross.validate(models)
         except Exception:
-            pass
+            cross_results = []
 
         return {
             "documents": models,
