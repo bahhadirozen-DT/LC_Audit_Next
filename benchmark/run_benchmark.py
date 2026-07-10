@@ -29,7 +29,21 @@ for scenario in sorted(SCENARIOS.iterdir()):
         if f.is_file():
             docs[f.stem.upper()] = str(f)
 
-    report = engine.audit_documents(docs)
+    
+report = {}
+
+for _, filename in docs.items():
+    result = engine.audit(filename)
+
+    if "rules" in result:
+        report.setdefault("reserve_codes", [])
+
+        for r in result["rules"]:
+            if getattr(r, "status", "") == "FAIL":
+                code = getattr(r, "field", None) or getattr(r, "rule_id", None)
+                if code:
+                    report["reserve_codes"].append(str(code).upper())
+
 
     found = sorted(set(report.get("reserve_codes", [])))
 
