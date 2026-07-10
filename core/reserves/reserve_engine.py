@@ -10,6 +10,11 @@ from core.reserves import (
     r08_hs_code,
     r09_packing,
     r10_shipment_date,
+    r15_port_discharge,
+    r14_port_loading,
+    r13_transshipment,
+    r12_partial_shipment,
+    r11_latest_shipment,
 )
 
 
@@ -27,4 +32,9 @@ class ReserveEngine:
             r08_hs_code.check(lc, invoice),
             r09_packing.check(lc, invoice),
             r10_shipment_date.check(lc, invoice),
+            r11_latest_shipment.check(lc, invoice),
+            r12_partial_shipment.check(lc, invoice),
+            r13_transshipment.check(lc, invoice),
+            r14_port_loading.check(lc, invoice),
+            r15_port_discharge.check(lc, invoice),
         ]
