@@ -5,20 +5,47 @@ from core.validation.legalized_coo_validator import LegalizedCOOValidator
 
 
 class CrossDocumentValidator:
-    """
-    Central dispatcher for all cross-document validation.
-    """
 
     def __init__(self):
-        self.required_documents = RequiredDocumentsValidator()
-        self.original_copy = OriginalCopyValidator()
-        self.insurance = InsuranceValidator()
-        self.legalized_coo = LegalizedCOOValidator()
 
-    def validators(self):
-        return {
-            "required_documents": self.required_documents,
-            "original_copy": self.original_copy,
-            "insurance": self.insurance,
-            "legalized_coo": self.legalized_coo,
-        }
+        self.validators = [
+
+            RequiredDocumentsValidator(),
+
+            OriginalCopyValidator(),
+
+            InsuranceValidator(),
+
+            LegalizedCOOValidator(),
+
+        ]
+
+    def validate(self, lc, documents):
+
+        results = []
+
+        for validator in self.validators:
+
+            if hasattr(validator, "validate"):
+
+                try:
+
+                    r = validator.validate(lc, documents)
+
+                    if r:
+
+                        if isinstance(r, list):
+
+                            results.extend(r)
+
+                        else:
+
+                            results.append(r)
+
+                except Exception as e:
+
+                    results.append(
+                        f"{validator.__class__.__name__.upper()} ERROR: {e}"
+                    )
+
+        return results
