@@ -35,24 +35,25 @@ for f in scenario.iterdir():
         docs[f.stem.upper()] = str(f)
 
     
-report = {}
 
-for _, filename in docs.items():
-    result = engine.audit(filename)
+    report = engine.audit_folder(str(scenario))
 
-    if "rules" in result:
-        report.setdefault("reserve_codes", [])
+    found = []
 
-        for r in result["rules"]:
-            if getattr(r, "status", "") == "FAIL":
-                code = getattr(r, "field", None) or getattr(r, "rule_id", None)
-                if code:
-                    report["reserve_codes"].append(str(code).upper())
+    for r in report.get("cross_results", []):
 
+        if isinstance(r, str):
+            found.append(r.upper())
 
-    found = sorted(set(report.get("reserve_codes", [])))
+        elif hasattr(r, "code"):
+            found.append(str(r.code).upper())
 
-    expected_file = EXPECTED / f"{scenario.name}.json"
+        elif hasattr(r, "field"):
+            found.append(str(r.field).upper())
+
+    found = sorted(set(found))
+
+expected_file = EXPECTED / f"{scenario.name}.json"
 
     if expected_file.exists():
         expected = sorted(json.loads(expected_file.read_text()))
