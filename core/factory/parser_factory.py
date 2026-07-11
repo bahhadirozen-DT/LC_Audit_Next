@@ -43,8 +43,10 @@ class ParserFactory:
                 f"Unsupported document type: {doc_type}"
             )
 
-        return {
-            "document_type": doc_type,
-            "confidence": result["confidence"],
-            "model": model
-        }
+        try:
+            model.document_type = doc_type
+            model.confidence = result["confidence"]
+        except Exception:
+            pass
+
+        return model

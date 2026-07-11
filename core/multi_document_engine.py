@@ -16,9 +16,9 @@ class MultiDocumentEngine:
 
             documents.append({
                 "filename": filename,
-                "document_type": parsed["document_type"],
+                "document_type": parsed.document_type,
                 "confidence": parsed["confidence"],
-                "model": parsed["model"]
+                "model": parsed
             })
 
         return documents

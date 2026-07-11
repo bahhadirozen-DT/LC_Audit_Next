@@ -25,7 +25,7 @@ class AuditEngine:
     def audit(self, filename):
 
         parsed = self.load_and_parse(filename)
-        model = parsed["model"]
+        model = parsed
 
         rules = self.rules.audit(model)
 
@@ -35,8 +35,8 @@ class AuditEngine:
             similarity = {}
 
         return {
-            "document_type": parsed["document_type"],
-            "confidence": parsed["confidence"],
+            "document_type": parsed.document_type,
+            "confidence": getattr(parsed, "confidence", 1.0),
             "model": model,
             "rules": rules,
             "similarity": similarity,
@@ -60,7 +60,7 @@ class AuditEngine:
 
             try:
                 parsed = self.load_and_parse(str(file))
-                models.append(parsed["model"])
+                models.append(parsed)
             except Exception as e:
                 print(f"SKIP {file.name}: {e}")
 
