@@ -10,106 +10,63 @@ from core.validation.consignee_validator import ConsigneeValidator
 from core.validation.goods_validator import GoodsValidator
 
 
-
 class CrossDocumentValidator:
 
     def __init__(self):
+
         self.required = RequiredDocumentsValidator()
         self.original = OriginalCopyValidator()
         self.insurance = InsuranceValidator()
         self.legalized = LegalizedCOOValidator()
 
-    def validate(self, documents):
+        self.amount = AmountValidator()
+        self.applicant = ApplicantValidator()
+        self.shipper = ShipperValidator()
+        self.consignee = ConsigneeValidator()
+        self.goods = GoodsValidator()
+
+    def validate(self, models):
 
         mt700 = None
+        invoice = None
+        bl = None
+        packing = None
+        insurance = None
+        coo = None
 
-        uploaded = []
+        for m in models:
 
-        insurance_policy = False
-        insurance_certificate = False
+            t = getattr(m, "document_type", "")
 
-        legalized_uploaded = False
+            if t == "MT700":
+                mt700 = m
 
-        originals = 0
-        copies = 0
+            elif t == "COMMERCIAL_INVOICE":
+                invoice = m
 
-        for item in documents:
+            elif t == "BILL_OF_LADING":
+                bl = m
 
-            model = item
+            elif t == "PACKING_LIST":
+                packing = m
 
-            dtype = item.document_type
+            elif t == "INSURANCE_CERTIFICATE":
+                insurance = m
 
-            if dtype == "MT700":
-                mt700 = model
-                continue
-
-            uploaded.append(dtype)
-
-            if getattr(model, "originals", None):
-                originals += model.originals
-
-            if getattr(model, "copies", None):
-                copies += model.copies
-
-            if dtype == "INSURANCE_CERTIFICATE":
-                insurance_certificate = True
-
-            if dtype == "INSURANCE_POLICY":
-                insurance_policy = True
-
-            if dtype == "CERTIFICATE_OF_ORIGIN":
-                legalized_uploaded = bool(
-                    getattr(model, "legalized", False)
-                )
-
-        if mt700 is None:
-            return []
+            elif t == "CERTIFICATE_OF_ORIGIN":
+                coo = m
 
         results = []
 
-        required_docs = [
-            x["document"]
-            for x in getattr(mt700, "required_document_specs", [])
-        ]
+        if mt700 and invoice:
+            results += self.amount.validate(mt700, invoice)
+            results += self.applicant.validate(mt700, invoice)
 
-        results.append(
-            self.required.validate(
-                required_docs,
-                uploaded,
-            )
-        )
+        if invoice and bl:
+            results += self.shipper.validate(invoice, bl)
+            results += self.consignee.validate(invoice, bl)
 
-        for spec in getattr(mt700, "required_document_specs", []):
-
-            if spec["document"] == "INSURANCE":
-
-                results.append(
-                    self.insurance.validate(
-                        spec["policy"],
-                        spec["certificate"],
-                        insurance_policy,
-                        insurance_certificate,
-                    )
-                )
-
-            if spec["document"] == "CERTIFICATE_OF_ORIGIN":
-
-                results.append(
-                    self.legalized.validate(
-                        spec["legalized"],
-                        legalized_uploaded,
-                    )
-                )
-
-            if spec["originals"] or spec["copies"]:
-
-                results.append(
-                    self.original.validate(
-                        spec["originals"],
-                        spec["copies"],
-                        originals,
-                        copies,
-                    )
-                )
+        if invoice and packing and bl:
+            results += self.goods.validate(invoice, packing, bl)
 
         return results
