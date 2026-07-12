@@ -74,19 +74,19 @@ def parse_bill_of_lading(text):
 
 
     m.voyage=find(
-        r"Voyage\\s*(?:No)?[:\\s]+([^\\n]+)",
+        r"Voyage\s*(?:No)?[:\s]+([^\n]+)",
         text,
     )
 
 
     m.freight=find(
-        r"Freight.*?:\\s*([^\\n]+)",
+        r"Freight.*?:\s*([^\n]+)",
         text,
     )
 
 
     m.measurement=find(
-        r"Measurement[:\\s]+([^\\n]+)",
+        r"Measurement[:\s]+([^\n]+)",
         text,
     )
 
