@@ -44,6 +44,29 @@ def parse_commercial_invoice(text):
         text
     )
 
+    m.hs_code = find(
+        r"HS\s*Code[:\s]+([^\n]+)",
+        text
+    )
+
+    m.quantity = find(
+        r"Quantity[:\s]+([^\n]+)",
+        text
+    )
+
+    m.unit_price = find(
+        r"Unit\s*Price[:\s]+([^\n]+)",
+        text
+    )
+
+    o=find(r"In\s*(\d+)\s*original",text)
+    if o:
+        m.originals=int(o)
+
+    c=find(r"and\s*(\d+)\s*cop",text)
+    if c:
+        m.copies=int(c)
+
     goods = find(
         r"Description\s*of\s*Goods[:\s]+(.*?)Quantity:",
         text
