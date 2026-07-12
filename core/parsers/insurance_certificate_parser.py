@@ -56,6 +56,24 @@ def parse_insurance_certificate(text):
     # Generic metadata
     # --------------------------------------------------
 
+
+    model.insurance_clause=_find(
+        r"Clauses?[:\\s]+([^\\n]+)",
+        text
+    )
+
+
+    model.claims_payable=_find(
+        r"Claims.*?:\\s*([^\\n]+)",
+        text
+    )
+
+
+    model.endorsement=_find(
+        r"Endorsement[:\\s]+([^\\n]+)",
+        text
+    )
+
     model.raw_text = text
 
     if not hasattr(model, "originals"):
