@@ -5,6 +5,26 @@ from models.packing_list_model import PackingListModel
 
 def find(pattern, text):
     m = re.search(pattern, text, re.I | re.S)
+
+    m.total_packages=find(
+        r"Total\s*Packages[:\s]+([^\n]+)",
+        text,
+    )
+
+    m.gross_weight=find(
+        r"TOTAL.*?\|\s*([\d.,]+\s*KG)",
+        text,
+    )
+
+    m.net_weight=find(
+        r"TOTAL.*?\|\s*[\d.,]+\s*KG\s*\|\s*([\d.,]+\s*KG)",
+        text,
+    )
+
+    m.cbm=find(
+        r"([\d.,]+\s*CBM)",
+        text,
+    )
     return m.group(1).strip() if m else None
 
 
@@ -45,4 +65,24 @@ def parse_packing_list(text):
     if goods:
         m.goods_description = goods
 
+
+    m.total_packages=find(
+        r"Total\s*Packages[:\s]+([^\n]+)",
+        text,
+    )
+
+    m.gross_weight=find(
+        r"TOTAL.*?\|\s*([\d.,]+\s*KG)",
+        text,
+    )
+
+    m.net_weight=find(
+        r"TOTAL.*?\|\s*[\d.,]+\s*KG\s*\|\s*([\d.,]+\s*KG)",
+        text,
+    )
+
+    m.cbm=find(
+        r"([\d.,]+\s*CBM)",
+        text,
+    )
     return m
