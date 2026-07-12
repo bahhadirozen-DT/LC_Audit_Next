@@ -85,5 +85,11 @@ def parse_insurance_certificate(text):
     if not hasattr(model, "shipment_date"):
         model.shipment_date = None
 
-    return model
+    
+    model.clauses=_find(
+        r"Clauses[:\s]+([^\n]+)",
+        text,
+    )
+
+return model
 
