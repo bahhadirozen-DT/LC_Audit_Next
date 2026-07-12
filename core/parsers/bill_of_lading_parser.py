@@ -5,6 +5,24 @@ from models.bill_of_lading_model import BillOfLadingModel
 
 def find(pattern, text):
     m = re.search(pattern, text, re.I | re.S)
+
+    m.voyage=find(
+        r"Voyage\\s*(?:No)?[:\\s]+([^\\n]+)",
+        text,
+    )
+
+
+    m.freight=find(
+        r"Freight.*?:\\s*([^\\n]+)",
+        text,
+    )
+
+
+    m.measurement=find(
+        r"Measurement[:\\s]+([^\\n]+)",
+        text,
+    )
+
     return m.group(1).strip() if m else None
 
 
@@ -70,6 +88,24 @@ def parse_bill_of_lading(text):
 
     m.gross_weight = find(
         r"Gross\s*Weight[:\s]+([^\n]+)",
+        text,
+    )
+
+
+    m.voyage=find(
+        r"Voyage\\s*(?:No)?[:\\s]+([^\\n]+)",
+        text,
+    )
+
+
+    m.freight=find(
+        r"Freight.*?:\\s*([^\\n]+)",
+        text,
+    )
+
+
+    m.measurement=find(
+        r"Measurement[:\\s]+([^\\n]+)",
         text,
     )
 
