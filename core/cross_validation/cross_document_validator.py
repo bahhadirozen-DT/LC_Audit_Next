@@ -69,4 +69,40 @@ class CrossDocumentValidator:
         if invoice and packing and bl:
             results += self.goods.validate(invoice, packing, bl)
 
+        if mt700 and insurance:
+            r = self.insurance.validate(
+                True,
+                True,
+                False,
+                getattr(insurance, "insured_party", None) is not None,
+            )
+            if r["status"] == "FAIL":
+                results.append("INSURED_PARTY_MISMATCH")
+
+        if mt700 and coo:
+            r = self.legalized.validate(
+                True,
+                getattr(coo, "legalized", False),
+            )
+            if r["status"] == "FAIL":
+                results.append("LEGALIZED_CERTIFICATE_OF_ORIGIN")
+
+
+        if mt700 and bl:
+            mt_date = getattr(mt700, "latest_shipment_date", None)
+            bl_date = getattr(bl, "shipment_date", None)
+
+            if mt_date and bl_date:
+                try:
+                    from datetime import datetime
+
+                    mt_dt = datetime.strptime(mt_date.strip(), "%d.%m.%Y")
+                    bl_dt = datetime.strptime(bl_date.strip(), "%d.%m.%Y")
+
+                    if bl_dt > mt_dt:
+                        results.append("LATEST_SHIPMENT_DATE")
+
+                except Exception:
+                    pass
+
         return results

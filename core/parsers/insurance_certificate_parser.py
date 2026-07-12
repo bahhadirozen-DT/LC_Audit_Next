@@ -47,6 +47,9 @@ def parse_insurance_certificate(text):
         text
     )
 
+    # Benchmark compatibility
+    model.insured_party = model.insured
+
     
 
     # --------------------------------------------------

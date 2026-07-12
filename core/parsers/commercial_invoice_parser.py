@@ -52,6 +52,18 @@ def parse_commercial_invoice(text):
     if goods:
         m.goods.append(goods)
 
+    # -----------------------------
+    # Benchmark compatibility
+    # -----------------------------
+    m.amount = getattr(m, "total_amount", None)
+
+    m.applicant = getattr(m, "buyer", None)
+
+    if getattr(m, "goods", None):
+        m.goods_description = "\n".join(m.goods)
+    else:
+        m.goods_description = None
+
     
 
     # --------------------------------------------------
