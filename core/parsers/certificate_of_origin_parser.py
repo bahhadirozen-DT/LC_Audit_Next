@@ -6,7 +6,25 @@ from models.certificate_of_origin_model import CertificateOfOriginModel
 
 def g(pattern, text):
     m = re.search(pattern, text, re.I | re.M)
-    return m.group(1).strip() if m else None
+    
+    m.signature=g(
+        r"Signature[:\s]+([^\n]+)",
+        text,
+    )
+
+
+    m.chamber=g(
+        r"Chamber.*?[:\s]+([^\n]+)",
+        text,
+    )
+
+
+    m.legalized=g(
+        r"Legalized[:\s]+([^\n]+)",
+        text,
+    )
+
+return m.group(1).strip() if m else None
 
 def parse_certificate_of_origin(text: str):
 
@@ -59,5 +77,23 @@ def parse_certificate_of_origin(text: str):
     if not hasattr(m, "shipment_date"):
         m.shipment_date = None
 
-    return m
+    
+    m.signature=g(
+        r"Signature[:\s]+([^\n]+)",
+        text,
+    )
+
+
+    m.chamber=g(
+        r"Chamber.*?[:\s]+([^\n]+)",
+        text,
+    )
+
+
+    m.legalized=g(
+        r"Legalized[:\s]+([^\n]+)",
+        text,
+    )
+
+return m
 
