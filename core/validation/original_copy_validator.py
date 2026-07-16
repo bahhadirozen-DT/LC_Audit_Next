@@ -1,28 +1,34 @@
 class OriginalCopyValidator:
-    """
-    Validate required originals/copies against uploaded document metadata.
-    """
 
-    def validate(self, required_originals, required_copies,
-                 uploaded_originals, uploaded_copies):
+    def validate(self, mt700, invoice, bl, packing, insurance, coo):
 
-        result = {
-            "status": "PASS",
-            "errors": []
-        }
+        r=[]
 
-        if required_originals is not None:
-            if uploaded_originals is None or uploaded_originals < required_originals:
-                result["status"] = "FAIL"
-                result["errors"].append(
-                    f"Originals required: {required_originals}, uploaded: {uploaded_originals}"
-                )
+        docs=[
+            ("invoice",invoice),
+            ("bill_of_lading",bl),
+            ("packing_list",packing),
+            ("insurance",insurance),
+            ("certificate_of_origin",coo),
+        ]
 
-        if required_copies is not None:
-            if uploaded_copies is None or uploaded_copies < required_copies:
-                result["status"] = "FAIL"
-                result["errors"].append(
-                    f"Copies required: {required_copies}, uploaded: {uploaded_copies}"
-                )
+        for name,doc in docs:
 
-        return result
+            if doc is None:
+                continue
+
+            lc_org=getattr(mt700,f"{name}_originals",None)
+            lc_cpy=getattr(mt700,f"{name}_copies",None)
+
+            org=getattr(doc,"originals",None)
+            cpy=getattr(doc,"copies",None)
+
+            if lc_org is not None and org is not None:
+                if int(lc_org)!=int(org):
+                    r.append(f"{name.upper()}_ORIGINALS_MISMATCH")
+
+            if lc_cpy is not None and cpy is not None:
+                if int(lc_cpy)!=int(cpy):
+                    r.append(f"{name.upper()}_COPIES_MISMATCH")
+
+        return r

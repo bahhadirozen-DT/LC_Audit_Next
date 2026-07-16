@@ -35,6 +35,7 @@ class CrossDocumentValidator:
         self.port = PortValidator()
         self.freight = FreightValidator()
         self.notify_party = NotifyPartyValidator()
+        self.original_copy = OriginalCopyValidator()
 
 
     def validate(self, models):
@@ -129,5 +130,15 @@ class CrossDocumentValidator:
 
         if mt700 and bl:
             results += self.notify_party.validate(mt700, bl)
+
+
+        results += self.original_copy.validate(
+            mt700,
+            invoice,
+            bl,
+            packing,
+            insurance,
+            coo,
+        )
 
         return results
