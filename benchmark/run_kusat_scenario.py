@@ -33,4 +33,13 @@ if len(documents) < 6:
     print("Scenario is incomplete.")
     raise SystemExit(1)
 
-print("Ready for AuditEngine integration.")
+print("Running AuditEngine...")
+print()
+
+result = engine.audit(documents)
+
+print("=" * 70)
+print("AUDIT RESULT")
+print("=" * 70)
+print(result)
+
