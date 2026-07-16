@@ -12,12 +12,6 @@ class OriginalCopyValidator:
                     "reserve": "ORIGINALS_MISMATCH"
                 }
 
-            if copies != req_copies:
-                return {
-                    "status": "FAIL",
-                    "reserve": "COPIES_MISMATCH"
-                }
-
             return {
                 "status": "PASS"
             }
