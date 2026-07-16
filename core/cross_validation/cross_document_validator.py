@@ -1,3 +1,4 @@
+from core.validation.payment_terms_validator import PaymentTermsValidator
 from core.validation.endorsement_validator import EndorsementValidator
 from core.validation.insurance_clause_validator import InsuranceClauseValidator
 from core.validation.insurance_amount_validator import InsuranceAmountValidator
