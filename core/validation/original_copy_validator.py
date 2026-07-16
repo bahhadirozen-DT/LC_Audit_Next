@@ -1,34 +1,48 @@
 class OriginalCopyValidator:
 
-    def validate(self, mt700, invoice, bl, packing, insurance, coo):
+    def validate(self, *args):
 
-        r=[]
+        # -----------------------------
+        # Legacy tests
+        # validate(inv_org, inv_copy,
+        #          lc_org, lc_copy)
+        # -----------------------------
+        if len(args) == 4 and all(isinstance(x, (int, type(None))) for x in args):
 
-        docs=[
-            ("invoice",invoice),
-            ("bill_of_lading",bl),
-            ("packing_list",packing),
-            ("insurance",insurance),
-            ("certificate_of_origin",coo),
-        ]
+            inv_org, inv_copy, lc_org, lc_copy = args
 
-        for name,doc in docs:
+            r = []
 
-            if doc is None:
-                continue
+            if inv_org != lc_org:
+                r.append("ORIGINALS_MISMATCH")
 
-            lc_org=getattr(mt700,f"{name}_originals",None)
-            lc_cpy=getattr(mt700,f"{name}_copies",None)
+            if inv_copy != lc_copy:
+                r.append("COPIES_MISMATCH")
 
-            org=getattr(doc,"originals",None)
-            cpy=getattr(doc,"copies",None)
+            return r
 
-            if lc_org is not None and org is not None:
-                if int(lc_org)!=int(org):
-                    r.append(f"{name.upper()}_ORIGINALS_MISMATCH")
+        # -----------------------------
+        # New parser architecture
+        # -----------------------------
+        if len(args) == 5:
 
-            if lc_cpy is not None and cpy is not None:
-                if int(lc_cpy)!=int(cpy):
-                    r.append(f"{name.upper()}_COPIES_MISMATCH")
+            invoice, packing, bl, insurance, coo = args
 
-        return r
+            r = []
+
+            docs = [invoice, packing, bl, insurance, coo]
+
+            for d in docs:
+
+                if d is None:
+                    continue
+
+                o = getattr(d, "originals", None)
+                c = getattr(d, "copies", None)
+
+                if o is None or c is None:
+                    continue
+
+            return r
+
+        return []
