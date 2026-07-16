@@ -8,6 +8,10 @@ from core.validation.applicant_validator import ApplicantValidator
 from core.validation.shipper_validator import ShipperValidator
 from core.validation.consignee_validator import ConsigneeValidator
 from core.validation.goods_validator import GoodsValidator
+from core.validation.freight_validator import FreightValidator
+from core.validation.port_validator import PortValidator
+from core.validation.incoterm_validator import IncotermValidator
+from core.validation.hs_code_validator import HSCodeValidator
 
 
 class CrossDocumentValidator:
@@ -24,6 +28,12 @@ class CrossDocumentValidator:
         self.shipper = ShipperValidator()
         self.consignee = ConsigneeValidator()
         self.goods = GoodsValidator()
+
+        self.hs_code = HSCodeValidator()
+        self.incoterm = IncotermValidator()
+        self.port = PortValidator()
+        self.freight = FreightValidator()
+
 
     def validate(self, models):
 
@@ -104,5 +114,14 @@ class CrossDocumentValidator:
 
                 except Exception:
                     pass
+
+
+        if mt700 and invoice:
+            results += self.hs_code.validate(mt700, invoice)
+            results += self.incoterm.validate(mt700, invoice)
+
+        if mt700 and bl:
+            results += self.port.validate(mt700, bl)
+            results += self.freight.validate(mt700, bl)
 
         return results
