@@ -18,11 +18,12 @@ for file in sorted(ROOT.glob("*.txt")):
 
     text = file.read_text(encoding="utf-8")
 
-    doc_type = detector.detect(text)
+    result = detector.detect(text)
+    doc_type = result["document_type"]
 
     documents[doc_type] = text
 
-    print(f"{file.name:35} -> {doc_type}")
+    print(f"{file.name:35} -> {doc_type} ({result['confidence']})")
 
 print()
 
