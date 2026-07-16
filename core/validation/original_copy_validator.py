@@ -2,47 +2,43 @@ class OriginalCopyValidator:
 
     def validate(self, *args):
 
-        # -----------------------------
-        # Legacy tests
-        # validate(inv_org, inv_copy,
-        #          lc_org, lc_copy)
-        # -----------------------------
-        if len(args) == 4 and all(isinstance(x, (int, type(None))) for x in args):
+        # Eski test desteği
+        if len(args) == 4:
+            req_originals, req_copies, originals, copies = args
 
-            inv_org, inv_copy, lc_org, lc_copy = args
+            if originals != req_originals:
+                return {
+                    "status": "FAIL",
+                    "reserve": "ORIGINALS_MISMATCH"
+                }
 
-            r = []
+            if copies != req_copies:
+                return {
+                    "status": "FAIL",
+                    "reserve": "COPIES_MISMATCH"
+                }
 
-            if inv_org != lc_org:
-                r.append("ORIGINALS_MISMATCH")
+            return {
+                "status": "PASS"
+            }
 
-            if inv_copy != lc_copy:
-                r.append("COPIES_MISMATCH")
-
-            return r
-
-        # -----------------------------
-        # New parser architecture
-        # -----------------------------
+        # Yeni engine desteği
         if len(args) == 5:
-
             invoice, packing, bl, insurance, coo = args
 
-            r = []
+            reserves = []
 
             docs = [invoice, packing, bl, insurance, coo]
 
             for d in docs:
-
                 if d is None:
                     continue
 
-                o = getattr(d, "originals", None)
-                c = getattr(d, "copies", None)
-
-                if o is None or c is None:
+                if getattr(d, "originals", None) is None:
                     continue
 
-            return r
+                # Buraya gerçek LC karşılaştırması daha sonra gelecek
 
-        return []
+            return reserves
+
+        raise TypeError("Unsupported validate() signature")
