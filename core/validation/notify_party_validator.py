@@ -1,14 +1,14 @@
 class NotifyPartyValidator:
 
-    def validate(self, mt700, bl):
+    def validate(self, invoice, bl):
 
-        lc = getattr(mt700, "notify_party", None)
+        inv = getattr(invoice, "notify_party", None)
         bol = getattr(bl, "notify_party", None)
 
-        if not lc or not bol:
+        if not inv or not bol:
             return []
 
-        if lc.strip().upper() != bol.strip().upper():
+        if inv.strip().upper() != bol.strip().upper():
             return ["NOTIFY_PARTY_MISMATCH"]
 
         return []
