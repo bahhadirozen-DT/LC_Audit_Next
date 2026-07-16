@@ -9,6 +9,7 @@ from core.validation.shipper_validator import ShipperValidator
 from core.validation.consignee_validator import ConsigneeValidator
 from core.validation.goods_validator import GoodsValidator
 from core.validation.freight_validator import FreightValidator
+from core.validation.notify_party_validator import NotifyPartyValidator
 from core.validation.port_validator import PortValidator
 from core.validation.incoterm_validator import IncotermValidator
 from core.validation.hs_code_validator import HSCodeValidator
@@ -33,6 +34,7 @@ class CrossDocumentValidator:
         self.incoterm = IncotermValidator()
         self.port = PortValidator()
         self.freight = FreightValidator()
+        self.notify_party = NotifyPartyValidator()
 
 
     def validate(self, models):
@@ -123,5 +125,9 @@ class CrossDocumentValidator:
         if mt700 and bl:
             results += self.port.validate(mt700, bl)
             results += self.freight.validate(mt700, bl)
+
+
+        if mt700 and bl:
+            results += self.notify_party.validate(mt700, bl)
 
         return results
