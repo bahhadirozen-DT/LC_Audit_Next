@@ -1,3 +1,11 @@
+from core.validation.endorsement_validator import EndorsementValidator
+from core.validation.insurance_clause_validator import InsuranceClauseValidator
+from core.validation.insurance_amount_validator import InsuranceAmountValidator
+from core.validation.quantity_validator import QuantityValidator
+from core.validation.country_of_origin_validator import CountryOfOriginValidator
+from core.validation.vessel_validator import VesselValidator
+from core.validation.weight_validator import WeightValidator
+from core.validation.package_validator import PackageValidator
 from core.validation.required_documents_validator import RequiredDocumentsValidator
 from core.validation.original_copy_validator import OriginalCopyValidator
 from core.validation.insurance_validator import InsuranceValidator
@@ -29,6 +37,17 @@ class CrossDocumentValidator:
         self.shipper = ShipperValidator()
         self.consignee = ConsigneeValidator()
         self.goods = GoodsValidator()
+
+        self.package = PackageValidator()
+        self.weight = WeightValidator()
+        self.notify = NotifyPartyValidator()
+        self.vessel = VesselValidator()
+        self.country = CountryOfOriginValidator()
+        self.hs = HSCodeValidator()
+        self.quantity = QuantityValidator()
+        self.insurance_amount = InsuranceAmountValidator()
+        self.insurance_clause = InsuranceClauseValidator()
+        self.endorsement = EndorsementValidator()
 
         self.hs_code = HSCodeValidator()
         self.incoterm = IncotermValidator()
@@ -140,5 +159,28 @@ class CrossDocumentValidator:
             insurance,
             coo,
         )
+
+        
+
+        if invoice and packing and bl:
+            results += self.package.validate(invoice, packing, bl)
+            results += self.weight.validate(packing, bl)
+            results += self.notify.validate(invoice, bl)
+            results += self.vessel.validate(invoice, bl)
+            results += self.quantity.validate(invoice, packing, bl)
+
+        if invoice and coo:
+            results += self.country.validate(invoice, coo)
+
+        if mt700 and invoice:
+            results += self.hs.validate(mt700, invoice)
+
+        if invoice and insurance:
+            results += self.insurance_amount.validate(invoice, insurance)
+
+        if mt700 and insurance:
+            results += self.insurance_clause.validate(mt700, insurance)
+            results += self.endorsement.validate(mt700, insurance)
+
 
         return results
