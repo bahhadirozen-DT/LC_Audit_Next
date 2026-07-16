@@ -11,6 +11,7 @@ from core.cross_validation.cross_document_validator import CrossDocumentValidato
 class AuditEngine:
 
     def __init__(self):
+        self.cross_validator = CrossDocumentValidator()
         self.loader = DocumentLoader()
         self.factory = ParserFactory()
 
