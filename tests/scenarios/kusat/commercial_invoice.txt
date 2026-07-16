@@ -1,0 +1,10 @@
+COMMERCIAL INVOICE
+Invoice No: INV-001
+Exporter: ABC IMPORT LTD
+Importer: XYZ EXPORT LTD
+Total Amount: 100000
+Currency: USD
+Incoterm: FOB
+HS Code: 847130
+Quantity: 100
+Unit Price: 1000

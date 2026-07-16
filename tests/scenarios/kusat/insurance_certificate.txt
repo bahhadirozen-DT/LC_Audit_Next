@@ -1,0 +1,9 @@
+INSURANCE CERTIFICATE
+Certificate No: INS001
+Policy No: POL001
+Insurance Company: ABC INSURANCE
+Insured: ABC IMPORT LTD
+Beneficiary: XYZ EXPORT LTD
+Currency: USD
+Insured Amount: 110000
+Clauses: ICC(A)

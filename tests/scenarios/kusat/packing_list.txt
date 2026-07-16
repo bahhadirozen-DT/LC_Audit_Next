@@ -1,0 +1,6 @@
+PACKING LIST
+Packing List No: PL-001
+Total Packages: 10
+Gross KG: 1200
+Net KG: 1150
+CBM: 2.5

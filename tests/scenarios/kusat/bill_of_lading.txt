@@ -1,0 +1,9 @@
+BILL OF LADING
+B/L No: BL001
+Shipper: ABC IMPORT LTD
+Consignee: XYZ EXPORT LTD
+Notify Party: BANK
+Vessel: MSC TEST
+Port of Loading: ISTANBUL
+Port of Discharge: ROTTERDAM
+Freight Prepaid
