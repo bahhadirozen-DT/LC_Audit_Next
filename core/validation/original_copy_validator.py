@@ -4,7 +4,7 @@ class OriginalCopyValidator:
 
         # Eski test desteği
         if len(args) == 4:
-            req_originals, req_copies, originals, copies = args
+            req_originals, originals, req_copies, copies = args
 
             if originals != req_originals:
                 return {
