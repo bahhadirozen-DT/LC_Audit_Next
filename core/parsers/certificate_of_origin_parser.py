@@ -3,97 +3,69 @@ import re
 from models.certificate_of_origin_model import CertificateOfOriginModel
 
 
-
 def g(pattern, text):
-    m = re.search(pattern, text, re.I | re.M)
-    
-    m.signature=g(
-        r"Signature[:\s]+([^\n]+)",
-        text,
-    )
+    m = re.search(pattern, text, re.IGNORECASE | re.MULTILINE)
+    return m.group(1).strip() if m else None
 
-
-    m.chamber=g(
-        r"Chamber.*?[:\s]+([^\n]+)",
-        text,
-    )
-
-
-    m.legalized=g(
-        r"Legalized[:\s]+([^\n]+)",
-        text,
-    )
-
-return m.group(1).strip() if m else None
 
 def parse_certificate_of_origin(text: str):
 
-    m = CertificateOfOriginModel()
+    model = CertificateOfOriginModel()
 
-    m.certificate_number = g(
-        r"^Certificate\s*(?:No|Number)?[:\s]*([A-Z0-9\-\/]+)$",
+    model.certificate_number = g(
+        r"Certificate\s*(?:No|Number)?[:\s]*([A-Z0-9\-\/]+)",
         text,
     )
 
-    m.exporter = g(
-        r"^Exporter:\s*(.+)$",
+    model.exporter = g(
+        r"Exporter[:\s]*(.+)",
         text,
     )
 
-    m.consignee = g(
-        r"^(?:Consignee|Importer):\s*(.+)$",
+    model.consignee = g(
+        r"(?:Consignee|Importer)[:\s]*(.+)",
         text,
     )
 
-    m.country_of_origin = g(
-        r"^(?:Country of Origin|Goods Origin):\s*(.+)$",
+    model.country_of_origin = g(
+        r"(?:Country of Origin|Goods Origin)[:\s]*(.+)",
         text,
     )
 
-    m.country_of_destination = g(
-        r"^Country of Destination:\s*(.+)$",
+    model.country_of_destination = g(
+        r"Country of Destination[:\s]*(.+)",
         text,
     )
 
-    m.goods_description = g(
-        r"Description:\s*([\s\S]*?)\nSignature:",
+    model.goods_description = g(
+        r"Description[:\s]*(.+)",
         text,
     )
 
-    
-
-    # --------------------------------------------------
-    # Generic metadata
-    # --------------------------------------------------
-
-    m.raw_text = text
-
-    if not hasattr(m, "originals"):
-        m.originals = None
-
-    if not hasattr(m, "copies"):
-        m.copies = None
-
-    if not hasattr(m, "shipment_date"):
-        m.shipment_date = None
-
-    
-    m.signature=g(
-        r"Signature[:\s]+([^\n]+)",
+    model.signature = g(
+        r"Signature[:\s]*(.+)",
         text,
     )
 
-
-    m.chamber=g(
-        r"Chamber.*?[:\s]+([^\n]+)",
+    model.chamber = g(
+        r"Chamber.*?[:\s]*(.+)",
         text,
     )
 
-
-    m.legalized=g(
-        r"Legalized[:\s]+([^\n]+)",
+    model.legalized = g(
+        r"Legalized[:\s]*(.+)",
         text,
     )
 
-return m
+    model.raw_text = text
 
+    if not hasattr(model, "originals"):
+        model.originals = None
+
+    if not hasattr(model, "copies"):
+        model.copies = None
+
+    if not hasattr(model, "shipment_date"):
+        model.shipment_date = None
+
+    return model
