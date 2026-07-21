@@ -32,10 +32,10 @@ def parse_mt700(text: str):
     # SWIFT FORMAT
     # -----------------------------
 
-    model.field20 = _find(r":20:(.+)", text)
-    model.field31D = _find(r":31D:(.+)", text)
+    model.field20 = _find(r":20:([^\n\r]+)", text)
+    model.field31D = _find(r":31D:([^\n\r]+)", text)
     model.field32B = _find(r":32B:([A-Z]{3}\s*[\d,\.]+)", text)
-    model.field40A = _find(r":40A:(.+)", text)
+    model.field40A = _find(r":40A:([^\n\r]+)", text)
 
     model.field50 = _find(r":50:([\s\S]*?)(?=\n:|\Z)", text)
     model.field59 = _find(r":59:([\s\S]*?)(?=\n:|\Z)", text)
