@@ -1,25 +1,42 @@
 import re
 
+
 class AmountValidator:
 
-    def _value(self, x):
-        if not x:
+    TOLERANCE = 0.01
+
+    def _value(self, value):
+
+        if value is None:
             return None
 
-        s = str(x).replace(",", "")
-        m = re.search(r'([0-9]+(?:\.[0-9]+)?)', s)
+        s = str(value).replace(",", "")
 
-        return float(m.group(1)) if m else None
+        m = re.search(r"([0-9]+(?:\.[0-9]+)?)", s)
+
+        if not m:
+            return None
+
+        return float(m.group(1))
 
     def validate(self, mt700, invoice):
 
-        lc = self._value(getattr(mt700, "amount", None))
-        inv = self._value(getattr(invoice, "amount", None))
+        reserves = []
 
-        if lc is None or inv is None:
-            return []
+        lc_currency = getattr(mt700, "currency", None)
+        inv_currency = getattr(invoice, "currency", None)
 
-        if abs(lc - inv) > 0.01:
-            return ["AMOUNT_MISMATCH"]
+        if lc_currency and inv_currency:
+            if str(lc_currency).upper() != str(inv_currency).upper():
+                reserves.append("CURRENCY_MISMATCH")
 
-        return []
+        lc_amount = self._value(getattr(mt700, "amount", None))
+        inv_amount = self._value(getattr(invoice, "amount", None))
+
+        if lc_amount is None or inv_amount is None:
+            return reserves
+
+        if abs(lc_amount - inv_amount) > self.TOLERANCE:
+            reserves.append("AMOUNT_MISMATCH")
+
+        return reserves
