@@ -37,7 +37,7 @@ if len(documents) < 6:
 print("Running AuditEngine...")
 print()
 
-result = engine.audit(documents)
+result = engine.audit_folder(ROOT)
 
 print("=" * 70)
 print("AUDIT RESULT")
