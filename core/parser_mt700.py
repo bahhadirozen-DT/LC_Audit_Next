@@ -40,6 +40,17 @@ def parse_mt700(text: str):
     model.field50 = _find(r":50:([\s\S]*?)(?=\n:|\Z)", text)
     model.field59 = _find(r":59:([\s\S]*?)(?=\n:|\Z)", text)
 
+    model.field45A = _find(
+        r":45A:\s*([\s\S]*?)(?=\n:[0-9]{2}[A-Z]:|\Z)",
+        text,
+    )
+
+    model.field46A = _find(
+        r":46A:\s*([\s\S]*?)(?=\n:[0-9]{2}[A-Z]:|\Z)",
+        text,
+    )
+
+
     # -----------------------------
     # PDF FORMAT
     # -----------------------------
