@@ -155,8 +155,8 @@ class CrossDocumentValidator:
         results += self.original_copy.validate(
             mt700,
             invoice,
-            bl,
             packing,
+            bl,
             insurance,
             coo,
         )
