@@ -29,6 +29,15 @@ class DocumentDetector:
                     "scores": {doc_type: 100}
                 }
 
+        # SWIFT MT700 shortcut
+
+        if ":20:" in t and ":27:" in t and ":31D:" in t:
+            return {
+                "document_type": "MT700",
+                "confidence": 100,
+                "scores": {"MT700": 100},
+            }
+
         # =====================================================
         # STAGE 2
         # KEYWORD SCORING
